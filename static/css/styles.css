@@ -1,0 +1,54 @@
+
+/* Container so list aligns with input */
+.suggestions-container {
+  position: relative;
+  width: 100%;
+}
+
+
+
+/* Dropdown box */
+.suggestions-list {
+  position: absolute;
+  top: 100%; /* right under the input */
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  margin: 2px 0 0 0;
+  padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  font-size: 14px;
+  z-index: 1000;
+
+  /* 🔑 This removes the bullets */
+  list-style-type: none;
+}
+
+/* Each option */
+.suggestions-list li {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f1f1f1;
+  cursor: pointer;
+}
+
+/* Remove bottom border from last item */
+.suggestions-list li:last-child {
+  border-bottom: none;
+}
+
+/* Hover style */
+.suggestions-list li:hover {
+  background-color: #f9f9f9;
+  color: #0073e6;
+  font-weight: 500;
+}
+ul.suggestions-list {
+  list-style-type: none !important;
+  padding-left: 0 !important;
+  margin: 0 !important;
+}
+

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <title>WIDA Objective Builder</title>
+
+</head>
+<body>
+<header>
+  <div class="text-xl font-bold text-gray-900">WIDA Objective Builder</div>
+  <nav class="flex space-x-6">
+    <a href="#" class="text-gray-700 hover:text-blue-600">Home</a>
+    <a href="#" class="text-gray-700 hover:text-blue-600">About</a>
+    <a href="#" class="text-gray-700 hover:text-blue-600">Contact</a>
+  </nav>
+</header>
+
+<main>
+
+
+
+<!-- Objective preview -->
+<div class="bg-green-800 p-6 flex items-center justify-center">
+  <section class="flex items-center justify-center w-full">
+    <div class="relative z-10 flex flex-col justify-center w-full">
+      <div id="objective-preview"
+           class="text-white text-2xl md:text-3xl font-[Caveat] tracking-wide text-center space-x-1">
+        <span id="who" class="underline decoration-white decoration-2 cursor-pointer">[who]</span>
+        will be able to
+        <span id="function" class="underline decoration-white decoration-2 cursor-pointer">[function]</span>
+        <span id="goal" class="underline decoration-white decoration-2 cursor-pointer">[goal]</span>
+        through
+        <span id="domain" class="underline decoration-white decoration-2 cursor-pointer">[domain]</span> activities,
+        using
+        <span id="forms" class="underline decoration-white decoration-2 cursor-pointer">[forms/features]</span>,
+        with
+        <span id="supports" class="underline decoration-white decoration-2 cursor-pointer">[supports]</span>.
+      </div>
+    </div>
+  </section>
+</div>
+
+<nav class="flex items-center justify-center mt-8">
+  <ul id="steps" class="flex items-center space-x-6">
+    <li>
+      <div id="step-0" class="step flex items-center space-x-2 cursor-pointer">
+        <span class="text-sm font-semibold uppercase text-gray-900 border-b-2 border-blue-500 pb-1">
+          Who?
+        </span>
+        <span class="text-gray-400">&gt;</span>
+      </div>
+    </li>
+
+    <li>
+      <div id="step-1" class="step flex items-center space-x-2 cursor-pointer">
+        <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
+          What?
+        </span>
+        <span class="text-gray-400">&gt;</span>
+      </div>
+    </li>
+
+    <li>
+      <div id="step-2" class="step flex items-center space-x-2 cursor-pointer">
+        <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
+          Goal
+        </span>
+        <span class="text-gray-400">&gt;</span>
+      </div>
+    </li>
+
+    <li>
+      <div id="step-3" class="step flex items-center space-x-2 cursor-pointer">
+        <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
+          Domain
+        </span>
+        <span class="text-gray-400">&gt;</span>
+      </div>
+    </li>
+
+    <li>
+      <div id="step-4" class="step flex items-center space-x-2 cursor-pointer">
+        <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
+          Forms
+        </span>
+        <span class="text-gray-400">&gt;</span>
+      </div>
+    </li>
+
+    <li>
+      <div id="step-5" class="step flex items-center space-x-2 cursor-pointer">
+        <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
+          Supports
+        </span>
+      </div>
+    </li>
+  </ul>
+</nav>
+
+
+<div id="sidebar-section" class="hidden flex min-h-screen mt-20">
+   <div class="w-64 bg-gray-50 border-r border-gray-200 text-gray-800">
+       <p class="px-4 pt-4 text-xs text-gray-500 italic">Based on WIDA Rubrics</p>
+    <div id="sidebar-content" class="p-4">
+      <!-- dynamic content goes here -->
+    </div>
+  </div>
+
+  <div id="dynamic-panel" class="flex-1 bg-white p-10"></div>
+</div>
+
+</main>
+
+<!-- ================= SCRIPTS ================= -->
+
+<script>
+ function clearDynamicPanel() {
+  const panel = document.getElementById("dynamic-panel");
+  if (panel) panel.innerHTML = "";
+
+  // Close all suggestion dropdowns
+  document.querySelectorAll(".suggestions-list").forEach(list => {
+    list.innerHTML = "";
+    list.style.display = "none";
+  });
+}
+</script>
+
+
+<script>
+function canAdvanceFrom(step) {
+  switch (step) {
+    case 1: // Function step
+      return document.getElementById('function').textContent !== '[function]';
+    case 3: // Domain step
+      return document.getElementById('domain').textContent !== '[domain]';
+    case 4: // Forms step
+      return document.getElementById('forms').textContent !== '[forms/features]';
+    case 5: // Supports step
+      return document.getElementById('supports').textContent !== '[supports]';
+    default:
+      return true; // Step 0 and Goal can always move on
+  }
+}
+
+</script>
+<script>
+  function updateSidebar(step) {
+  const sidebarSection = document.getElementById('sidebar-section'); // wrapper
+  const sidebar = document.getElementById('sidebar-content');        // inner content
+
+  // Steps that actually need the sidebar
+  const sidebarSteps = ['function', 'domain', 'forms', 'supports'];
+
+
+  if (sidebarSteps.includes(step)) {
+    sidebarSection.classList.remove('hidden'); // show
+  } else {
+    sidebarSection.classList.add('hidden');    // hide
+    sidebar.innerHTML = "";                    // clear
+    return;                                    // stop
+  }
+
+  switch (step) {
+    case 'function':
+      sidebar.innerHTML = `
+        <ul class="space-y-4">
+          <li><button onclick="showContent('narrate')" class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">Narrating</button></li>
+          <li><button onclick="showContent('inform')"  class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">Informing</button></li>
+          <li><button onclick="showContent('explain')" class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">Explaining</button></li>
+          <li><button onclick="showContent('argue')"   class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">Arguing</button></li>
+        </ul>
+      `;
+      break;
+
+    case 'domain':
+      sidebar.innerHTML = `
+        <ul class="space-y-4">
+          <li><button onclick="showDomain('interpretive')" class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">Interpretive</button></li>
+          <li><button onclick="showDomain('expressive')"   class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">Expressive</button></li>
+        </ul>
+      `;
+      break;
+
+      case 'forms':
+      sidebar.innerHTML = `
+        <ul class="space-y-4">
+          <li><button onclick="showForms('structure')" class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">Structure</button></li>
+          <li><button onclick="showForms('descriptive-language')"   class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">Descriptive Language</button></li>
+          <li><button onclick="showForms('transitions')"   class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">Transitions</button></li>
+          <li><button onclick="showForms('adverbs')"   class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">adverbs</button></li>
+        </ul>
+  `;
+    break;
+
+    case 'supports':
+      sidebar.innerHTML = `
+        <ul class="space-y-4">
+          <li><button onclick="showSupports('sensory-supports')" class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">sensory-supports</button></li>
+          <li><button onclick="showSupports('graphic-supports')"   class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">graphic-supports</button></li>
+          <li><button onclick="showSupports('interactive-supports')"  class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">interactive-supports</button></li>
+        </ul>
+      `;
+      break;
+
+    default:
+      sidebar.innerHTML = `<p class="text-gray-500 p-4">Start Here</p>`;
+  }
+}
+
+</script>
+
+<script>
+function toggleSidebar() {
+  document.getElementById('sidebar-section').classList.toggle('hidden');
+}
+</script>
+
+<script>
+  function hideSidebar() {
+  document.getElementById('sidebar-section').classList.add('hidden');
+}
+</script>
+<!-- General update/set/next -->
+<script>
+function updateField(fieldId, value) {
+  const span = document.getElementById(fieldId);
+  if (span) span.textContent = value || `[${fieldId}]`;
+}
+
+function setValue(fieldId, value) {
+  const span = document.getElementById(fieldId);
+  if (span) {
+    if (fieldId === "domain") {
+  span.textContent = value;
+} else {
+  span.textContent = value;
+}
+  }
+}
+
+</script>
+
+<script>
+function showWhoInput() {
+  const panel = document.getElementById("dynamic-panel");
+  panel.innerHTML = `
+    <div class="flex flex-col space-y-2">
+      <div class="flex items-center space-x-2">
+        <input
+          type="text"
+          id="who-input"
+          placeholder="Type who here..."
+          class="w-full px-3 py-2 border rounded-md"
+          oninput="updateField('who', this.value); fetchSuggestions(this.value, 'who-suggestions', 'who')"
+        />
+        <span
+          title="WIDA Levels:
+1 – Entering
+2 – Emerging
+3 – Developing
+4 – Expanding
+5 – Bridging
+6 – Reaching"
+          style="cursor: help; font-size: 1.2em;"
+        >&#9432;</span>
+      </div>
+
+      <div class="suggestions-container relative">
+        <ul id="who-suggestions" class="suggestions-list absolute z-50 bg-white border border-gray-300 shadow-lg w-full"></ul>
+      </div>
+    </div>
+  `;
+}
+</script>
+
+
+<!-- Custom verb -->
+<script>
+function showCustomVerbInput() {
+  document.getElementById("customVerbContainer").style.display = "block";
+}
+function useCustomVerb() {
+  const verb = document.getElementById("customVerb").value.trim();
+  if (verb) {
+    document.getElementById("function").textContent = verb;
+    document.getElementById("customVerbContainer").style.display = "none";
+    document.getElementById("customVerb").value = "";
+  }
+}
+</script>
+
+<script>
+function showGoalInput() {
+  const panel = document.getElementById("dynamic-panel");
+  panel.innerHTML = `
+    <div class="flex flex-col space-y-2">
+      <div class="flex items-center space-x-2">
+        <input
+          type="text"
+          id="goal-input"
+          placeholder=""the pros and cons of ...."
+          class="w-full px-3 py-2 border rounded-md"
+          oninput="updateField('goal', this.value); fetchSuggestions(this.value, 'goal-suggestions','goal')"
+        />
+        </div>
+      <div class="suggestions-container relative">
+        <ul id="goal-suggestions" class="suggestions-list absolute z-50 bg-white border border-gray-300 shadow-lg w-full"></ul>
+      </div>
+    </div>
+  `;
+}
+</script>
+
+
+
+<!-- Custom domain -->
+<script>
+function showCustomDomainInput() {
+  document.getElementById("customDomainContainer").style.display = "block";
+}
+function useCustomDomain() {
+  const domain = document.getElementById("customDomain").value.trim();
+  if (domain) {
+    document.getElementById("domain").textContent = domain;
+    document.getElementById("customDomainContainer").style.display = "none";
+    document.getElementById("customDomain").value = "";
+  }
+}
+</script>
+
+<!-- Custom forms -->
+<script>
+function showCustomFormsInput() {
+  document.getElementById("customFormsContainer").style.display = "block";
+}
+function useCustomForms() {
+  const forms = document.getElementById("customForms").value.trim();
+  if (forms) {
+    document.getElementById("forms").textContent = forms;
+    document.getElementById("customFormsContainer").style.display = "none";
+    document.getElementById("customForms").value = "";
+  }
+}
+</script>
+
+<!-- Custom supports -->
+<script>
+function showCustomSupportsInput() {
+  document.getElementById("customSupportsContainer").style.display = "block";
+}
+function useCustomSupports() {
+  const supports = document.getElementById("customSupports").value.trim();
+  if (supports) {
+    document.getElementById("supports").textContent = supports;
+    document.getElementById("customSupportsContainer").style.display = "none";
+    document.getElementById("customSupports").value = "";
+  }
+}
+</script>
+
+<!-- Show function verbs -->
+<script>
+function showContent(type) {
+  const panel = document.getElementById("dynamic-panel");
+  let verbs = [];
+  switch (type) {
+    case "narrate": verbs = ["RELATE", "RECALL", "DESCRIBE", "LIST", "ARRANGE", "NARRATE"]; break;
+    case "inform":  verbs = ["DEFINE", "IDENTIFY", "LABEL", "LIST", "NAME", "RECOGNIZE", "MATCH", "DUPLICATE", "INFORM"]; break;
+    case "explain": verbs = ["CLASSIFY", "CONTRAST", "ILLUSTRATE", "EXPLAIN"]; break;
+    case "argue":   verbs = ["PERSUADE", "JUSTIFY", "DEFEND", "PROVE", "ARGUE"]; break;
+    default:        verbs = ["No details available."];
+  }
+
+  panel.innerHTML = `
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-4">
+      ${verbs.map(v => `
+        <button class="bg-blue-200 px-5 py-5 rounded text-center uppercase hover:bg-blue-300"
+                onclick="setValue('function','${v.toLowerCase()}');">
+          ${v}
+        </button>
+      `).join("")}
+    </div>
+
+    <div class="mt-6  pt-4">
+      <label for="customVerb" class="block text-sm font-medium mb-1">Add your own verb:</label>
+      <input id="customVerb"
+             type="text"
+             placeholder="Enter your verb/function"
+             class="w-full border rounded p-2"
+             oninput="updateField('function', this.value); fetchSuggestions(this.value, 'function-suggestions', 'function')">
+      <button class="mt-2 bg-blue-500 text-white px-3 py-1 rounded"
+              onclick="useCustomVerb()">Use</button>
+      <ul id="function-suggestions" class="suggestions-list mt-2"></ul>
+    </div>
+  `;
+}
+</script>
+
+
+<!-- Show domains -->
+<script>
+function showDomain(type) {
+  const panel = document.getElementById("dynamic-panel");
+  let domain = [];
+  switch (type) {
+    case "interpretive": domain = ["LISTENING", "READING"]; break;
+    case "expressive":   domain = ["WRITING", "SPEAKING"]; break;
+    default:             domain = ["No details available."];
+  }
+
+  panel.innerHTML = `
+    ${domain.map(d => `
+      <button class="bg-blue-200 px-5 py-5 rounded text-center uppercase hover:bg-blue-300
+                     text-center uppercase mr-2 mb-5 truncate rounded-md hover:bg-[#d7e4ea]"
+              onclick="setValue('domain','${d.toLowerCase()}')">
+        ${d}
+      </button>
+    `).join("")}
+
+    <div class="mt-4  pt-4">
+      <label for="custom-domain" class="block text-sm font-medium mb-1">Add your own:</label>
+      <input id="custom-domain"
+             type="text"
+             placeholder="Enter custom domain"
+             class="w-full border rounded p-2"
+             oninput="updateField('domain', this.value); fetchSuggestions(this.value, 'domain-suggestions','domain')" />
+      <ul id="domain-suggestions" class="suggestions-list mt-2"></ul>
+    </div>
+  `;
+}
+</script>
+
+<!-- Show forms -->
+<script>
+function showForms(type) {
+  const panel = document.getElementById("dynamic-panel");
+  let forms = [];
+  switch (type) {
+    case "structure": forms = ["CONCLUDING SENTENCE", "TOPIC SENTENCE(S)"]; break;
+    case "grammar": forms = ["MODALS", "NOUNS", "PRONOUNS", "VERBS"]; break;
+    case "descriptive-language": forms = ["ADJECTIVES", "FIGURATIVE LANGUAGE"]; break;
+    case "transitions": forms = ["CAUSE AND EFFECT", "TRANSITIONS", "SEQUENCING"]; break;
+    case "adverbs": forms = ["ADVERBS OF MANNER", "ADVERBS OF TIME"]; break;
+    default: forms = ["No details available."];
+  }
+
+  panel.innerHTML = `
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-4">
+      ${forms.map(f => `
+        <button
+          class="bg-blue-200 px-5 py-5 rounded text-center uppercase hover:bg-blue-300
+                 text-center uppercase mr-2 mb-5 truncate rounded-md hover:bg-[#d7e4ea]"
+          onclick="setValue('forms','${f.toLowerCase()}')">
+          ${f}
+        </button>
+      `).join("")}
+    </div>
+
+    <div class="mt-4  pt-4">
+      <label for="custom-forms" class="block text-sm font-medium mb-1">Add your own:</label>
+      <input id="custom-forms"
+             type="text"
+             placeholder="Enter custom form"
+             class="w-full border rounded p-2"
+             oninput="updateField('forms', this.value); fetchSuggestions(this.value, 'forms-suggestions','forms')" />
+      <ul id="forms-suggestions" class="suggestions-list mt-2"></ul>
+    </div>
+  `;
+}
+</script>
+
+
+<!-- Show supports -->
+<script>
+function showSupports(type) {
+  const panel = document.getElementById("dynamic-panel");
+  let supports = [];
+  switch (type) {
+    case "sensory-supports": supports = ["REALIA", "MANIPULATIVES"]; break;
+    case "graphic-supports": supports = ["CHARTS", "T-CHARTS", "GRAPHIC ORGANIZERS", "TIMELINES"]; break;
+    case "interactive-supports": supports = ["PARTNER WORK", "SMALL GROUP WORK"]; break;
+    default: supports = ["No details available."];
+  }
+
+  panel.innerHTML = `
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-4">
+      ${supports.map(s => `
+        <button class="bg-blue-200 px-5 py-5 rounded text-center uppercase hover:bg-blue-300
+                        text-center uppercase mr-2 mb-5 truncate rounded-md hover:bg-[#d7e4ea]"
+                onclick="setValue('supports','${s.toLowerCase()}')">
+          ${s}
+        </button>
+      `).join("")}
+    </div>
+
+    <div class="mt-4 pt-4">
+      <label for="custom-supports" class="block text-sm font-medium mb-1">Add your own:</label>
+      <input id="custom-supports"
+             type="text"
+             placeholder="Enter custom support"
+             class="w-full border rounded p-2"
+             oninput="updateField('supports', this.value); fetchSuggestions(this.value, 'supports-suggestions','supports')" />
+      <ul id="supports-suggestions" class="suggestions-list mt-2"></ul>
+    </div>
+  `;
+}
+</script>
+
+
+<!-- Suggestions -->
+<script>
+async function fetchSuggestions(inputValue, listId, fieldType) {
+  if (!inputValue) {
+    document.getElementById(listId).innerHTML = "";
+    return;
+  }
+  const res = await fetch(`/suggest_content?input=${encodeURIComponent(inputValue)}&field=${fieldType}`);
+  let suggestions = await res.json();
+  showSuggestions(suggestions, listId);
+}
+
+function showSuggestions(suggestions, listId) {
+  const list = document.getElementById(listId);
+  list.innerHTML = "";
+  suggestions.forEach(s => {
+    const li = document.createElement("li");
+    li.textContent = s;
+    li.style.cursor = "pointer";
+    li.onclick = () => {
+      const inputId = listId.replace("-suggestions","-input");
+      document.getElementById(inputId).value = s;
+
+       updateField(inputId.replace("-input",""), s);
+
+
+      list.innerHTML = "";
+    };
+    list.appendChild(li);
+  });
+}
+</script>
+
+ <script>
+const steps = document.querySelectorAll("#steps .step");
+let currentStep = 0;
+
+function nextStep(index) {
+
+if (index !== 0) clearDynamicPanel();
+
+  steps.forEach((step, i) => {
+    step.classList.remove("active", "completed", "disabled");
+
+    if (i < index) {
+      step.classList.add("completed");
+    } else if (i === index) {
+      step.classList.add("active");
+    } else if (i === index + 1) {
+      step.classList.remove("disabled");
+    } else {
+      step.classList.add("disabled");
+    }
+  });
+
+  // update the sidebar
+  if (index === 0) {
+    document.getElementById('sidebar-section').classList.remove('hidden');
+    showWhoInput();
+  }else if (index === 1) {
+    updateSidebar('function');
+  } else if (index === 2) {
+    showGoalInput();
+  } else if (index === 3) {
+    updateSidebar('domain');
+  } else if (index === 4) {
+    updateSidebar('forms');
+  } else if (index === 5) {
+    updateSidebar('supports');
+  } else {
+    updateSidebar('none');
+  }
+
+}
+
+// only once at startup
+steps.forEach((step, i) => {
+  step.addEventListener("click", e => {
+    e.preventDefault();
+    if (!step.classList.contains("disabled") && canAdvanceFrom(currentStep)) {
+      currentStep = i;
+      nextStep(i);
+    } else if (!canAdvanceFrom(currentStep)) {
+      alert("Please complete this step before continuing.");
+    }
+  });
+});
+
+// move forward
+function goForward() {
+  if (!canAdvanceFrom(currentStep)) {
+    alert("Please complete this step before continuing.");
+    return;
+  }
+  if (currentStep < steps.length - 1) {
+    currentStep++;
+    nextStep(currentStep);
+  }
+}
+
+// initial call
+nextStep(currentStep);
+
+
+</script>
+
+
+
+</body>
+
+<style>
+  .step.active {
+  display: block;
+}
+.step.completed {
+  display: block;
+  opacity: 0.6;
+}
+
+
+  .step.disabled {
+  opacity: 0.4;              /* greyed out look */
+  pointer-events: none;       /* blocks all clicks */
+  cursor: not-allowed;        /* cursor shows blocked hand */
+  color: #bbb;                /* lighter text */
+}
+
+.step.disabled:hover::after {
+  content: "Complete the current step first";
+  position: absolute;
+  background: #333;
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+  form.verb ul.verbs {
+  display: flex;
+  flex-wrap: wrap; /* lets items move to the next line */
+  gap: 10px;       /* spacing between items */
+  list-style: none; /* removes default bullets */
+  padding: 0;
+  margin: 0;
+}
+
+.suggestions-list {
+  transition: visibility 0s 0.2s; /* Hide immediately, but show with a delay (if desired) */
+}
+
+#dynamic-panel button {
+  min-height: 60px; /* or whatever looks good */
+}
+
+.suggestions-list {
+  list-style: none;    /* kill bullets */
+  margin: 0;           /* reset browser default margin */
+  padding: 0;          /* reset browser default padding */
+  border: none;        /* make sure no border is showing */
+  min-height: 0;       /* don’t reserve space when empty */
+}
+
+
+    header {
+  flex: 0 0 72px;        /* lock header height */
+  background: #fff;      /* or whatever color */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  position: relative;    /* no sticky/fixed */
+  z-index: 10;
+  padding: 0 1rem;
+}
+main {
+  flex: 1 1 auto;        /* main content fills the rest */
+  overflow-y: auto;      /* scrolls inside main if too tall */
+}
+
+
+
+</style>
+</html>
