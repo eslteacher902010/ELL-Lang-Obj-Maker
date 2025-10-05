@@ -19,28 +19,37 @@
 
 <main>
 
-
-
-<!-- Objective preview -->
 <div class="bg-green-800 p-6 flex items-center justify-center">
   <section class="flex items-center justify-center w-full">
+    <!-- SAME PARENT -->
     <div class="relative z-10 flex flex-col justify-center w-full">
+
+      <!-- preview -->
       <div id="objective-preview"
-           class="text-white text-2xl md:text-3xl font-[Caveat] tracking-wide text-center space-x-1">
-        <span id="who" class="underline decoration-white decoration-2 cursor-pointer">[who]</span>
-        will be able to
-        <span id="function" class="underline decoration-white decoration-2 cursor-pointer">[function]</span>
-        <span id="goal" class="underline decoration-white decoration-2 cursor-pointer">[goal]</span>
-        through
-        <span id="domain" class="underline decoration-white decoration-2 cursor-pointer">[domain]</span> activities,
-        using
-        <span id="forms" class="underline decoration-white decoration-2 cursor-pointer">[forms/features]</span>,
-        with
-        <span id="supports" class="underline decoration-white decoration-2 cursor-pointer">[supports]</span>.
+        class="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-white text-xl font-[Caveat] tracking-normal text-center">
+        <span id="who">[who]</span>
+        <span>will be able to</span>
+        <span id="function">[function]</span>
+        <span id="goal">[goal]</span>
+        <span>through</span>
+        <span id="domain">[domain]</span>
+        <span>activities, using</span>
+        <span id="forms">[forms/features]</span>
+        <span>with</span>
+        <span id="supports" class="whitespace-nowrap">[supports]</span>
+        <span>.</span>
       </div>
     </div>
   </section>
 </div>
+
+
+     <button id="copy-button"
+      class="fixed bottom-8 right-8 opacity-0 pointer-events-none px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/30 rounded-lg text-white text-sm font-medium transition-all duration-500 backdrop-blur-sm">
+       Copy Objective
+    </button>
+
+
 
 <nav class="flex items-center justify-center mt-8">
   <ul id="steps" class="flex items-center space-x-6">
@@ -94,6 +103,14 @@
         <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
           Supports
         </span>
+        <span class="text-gray-400">&gt;</span>
+      </div>
+    </li>
+    <li>
+      <div id="step-6" class="step flex items-center space-x-2 cursor-pointer">
+        <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
+          Finished LO
+        </span>
       </div>
     </li>
   </ul>
@@ -113,9 +130,116 @@
 
   <div id="full-panel" class="hidden bg-white p-10"></div>
 
+  <div id="who-example" class="hidden example-hint-who">
+    <div class="example-carousel flex items-center justify-center space-x-4" data-type="who">
+      <button onclick="prevExample(this)" class="p-2 text-gray-400 hover:text-gray-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+
+      <div class="text-gray-500">
+        <span class="italic">Example:</span>
+        <span class="example-text font-semibold text-gray-700"></span>
+      </div>
+
+      <button onclick="nextExample(this)" class="p-2 text-gray-400 hover:text-gray-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+  <div id="goal-example" class="hidden example-hint-goal">
+  <div class="example-carousel flex items-center justify-center space-x-4" data-type="goal">
+    <button onclick="prevExample(this)" class="p-2 text-gray-400 hover:text-gray-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+
+    <div class="text-gray-500">
+      <span class="italic">Example:</span>
+      <span class="example-text font-semibold text-gray-700"></span>
+    </div>
+
+    <button onclick="nextExample(this)" class="p-2 text-gray-400 hover:text-gray-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+
+
 </main>
 
 <!-- ================= SCRIPTS ================= -->
+<script>
+document.getElementById('copy-button').addEventListener('click', async() =>{
+  let text = document.getElementById('objective-preview').textContent
+    .replace(/\s+/g, ' ')  // replace all multiple spaces/newlines with a single space
+    .trim();               // remove leading/trailing spaces
+  try{
+  await navigator.clipboard.writeText(text)
+  const btn =document.getElementById('copy-button');
+  const original= btn.innerText;
+  btn.innerText= 'Copied';
+  setTimeout(() => btn.innerText= original, 2000);
+  }catch (err){
+  alert('Failed to copy.');
+  }
+  });
+  </script>
+
+
+
+
+
+<script>
+  //examples carosel
+const examples = {
+who: [
+  "7th grade newcomers",
+  "Level 2 Spanish speakers",
+  "High school ESL students",
+  "Elementary beginners"
+],
+
+  goal: [
+    "compare two characters",
+    "summarize a story",
+    "explain a scientific process"
+  ]
+  };
+
+const currentIndex= {who: 0, goal:0};
+
+function updateExample(container) {
+  const  type= container.dataset.type;
+  const textEl = container.querySelector(".example-text");
+  textEl.textContent= examples[type][currentIndex[type]];
+}
+
+ function prevExample(btn) {
+    const container = btn.closest(".example-carousel");
+    const type = container.dataset.type;
+    currentIndex[type] = (currentIndex[type] - 1 + examples[type].length) % examples[type].length;
+    updateExample(container);
+  }
+
+  function nextExample(btn) {
+    const container = btn.closest(".example-carousel");
+    const type = container.dataset.type;
+    currentIndex[type] = (currentIndex[type] + 1) % examples[type].length;
+    updateExample(container);
+  }
+
+  document.querySelectorAll(".example-carousel").forEach(c => updateExample(c));
+</script>
+
 
 <script>
  function clearDynamicPanel() {
@@ -275,6 +399,10 @@ function showWhoInput(targetId = "dynamic-panel")  {
       </div>
     </div>
   `;
+
+    document.getElementById("who-example").classList.remove("hidden");
+
+
 }
 </script>
 
@@ -296,6 +424,7 @@ function useCustomVerb() {
 
 <script>
 function showGoalInput(targetId = "dynamic-panel") {
+  document.getElementById("who-example").classList.add("hidden");
   const panel = document.getElementById(targetId);
   panel.innerHTML = `
     <div class="flex flex-col space-y-2">
@@ -303,7 +432,7 @@ function showGoalInput(targetId = "dynamic-panel") {
         <input
           type="text"
           id="goal-input"
-          placeholder=""the pros and cons of ...."
+          placeholder="the pros and cons of ...."
           class="w-full px-3 py-2 border rounded-md"
           oninput="updateField('goal', this.value); fetchSuggestions(this.value, 'goal-suggestions','goal')"
         />
@@ -313,6 +442,7 @@ function showGoalInput(targetId = "dynamic-panel") {
       </div>
     </div>
   `;
+   document.getElementById("goal-example").classList.remove("hidden");
 }
 </script>
 
@@ -519,31 +649,46 @@ async function fetchSuggestions(inputValue, listId, fieldType) {
     document.getElementById(listId).innerHTML = "";
     return;
   }
+
   const res = await fetch(`/suggest_content?input=${encodeURIComponent(inputValue)}&field=${fieldType}`);
   let suggestions = await res.json();
+
+  // 🔹 filter before showing
+  suggestions = filterSuggestions(suggestions, inputValue);
+
   showSuggestions(suggestions, listId);
+}
+
+// new filter function
+function filterSuggestions(suggestions, userInput) {
+  return suggestions.filter(s =>
+    s.toLowerCase().startsWith(userInput.toLowerCase())
+  );
 }
 
 function showSuggestions(suggestions, listId) {
   const list = document.getElementById(listId);
   list.innerHTML = "";
+
   suggestions.forEach(s => {
     const li = document.createElement("li");
     li.textContent = s;
     li.style.cursor = "pointer";
+
     li.onclick = () => {
-      const inputId = listId.replace("-suggestions","-input");
+      const inputId = listId.replace("-suggestions", "-input");
       document.getElementById(inputId).value = s;
 
-       updateField(inputId.replace("-input",""), s);
-
+      updateField(inputId.replace("-input",""), s);
 
       list.innerHTML = "";
     };
+
     list.appendChild(li);
   });
 }
 </script>
+
 
  <script>
 const steps = document.querySelectorAll("#steps .step");
@@ -568,26 +713,39 @@ if (index !== 0) clearDynamicPanel();
   });
 
   // update the sidebar
-  if (index === 0) {
+    if (index === 0) {
     document.getElementById('sidebar-section').classList.add('hidden');
     document.getElementById('full-panel').classList.remove('hidden');
-  showWhoInput("full-panel");
-  }else if (index === 1) {
+    showWhoInput("full-panel");
+  } else if (index === 1) {
     updateSidebar('function');
   } else if (index === 2) {
-   document.getElementById('sidebar-section').classList.add('hidden');
-   document.getElementById('full-panel').classList.remove('hidden');
-  showGoalInput("full-panel");
+    document.getElementById('sidebar-section').classList.add('hidden');
+    document.getElementById('full-panel').classList.remove('hidden');
+    showGoalInput("full-panel");
   } else if (index === 3) {
     updateSidebar('domain');
   } else if (index === 4) {
     updateSidebar('forms');
   } else if (index === 5) {
     updateSidebar('supports');
-  } else {
+  } else if (index === 6) {
+  const preview = document.getElementById("objective-preview");
+
+  const copyBtn = document.getElementById("copy-button");
+  copyBtn.classList.add("show");
+
+  preview.classList.add("fullscreen-preview", "fade-in");
+
+
+  // Optional: clear the rest of the UI
+  document.querySelector("header").style.display = "none";
+  document.querySelector("nav").style.display = "none";
+  document.getElementById("sidebar-section").classList.add("hidden");
+  document.getElementById("full-panel").classList.add("hidden");
+} else {
     updateSidebar('none');
   }
-
 }
 
 // only once at startup
@@ -695,7 +853,105 @@ main {
   overflow-y: auto;      /* scrolls inside main if too tall */
 }
 
+  .example-text {
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+.example-text:hover {
+  color: #60a5fa; /* Tailwind blue-400 hover effect */
+}
+
+  .fullscreen-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #065f46; /* Tailwind’s bg-green-800 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  transition: all 0.8s ease-in-out;
+  font-size: 1rem;
+}
+
+.fullscreen-preview span {
+  color: white;
+  text-decoration: none !important;
+}
+
+#objective-preview span::after {
+  content: "\00A0";
+  display: inline;
+}
+
+
+.fullscreen-preview.fade-in {
+  opacity: 0;
+  transform: scale(0.9);
+  animation: fadeZoomIn 0.8s forwards;
+}
+
+@keyframes fadeZoomIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+#copy-button {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: all 0.4s ease;
+}
+
+#copy-button.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition: all 0.4s ease;
+  z-index: 9999;
+}
+
+
+  .relative {
+    position: relative;
+    z-index: auto; /* don’t fix at 10 */
+    overflow: visible;
+}
 
 
 </style>
+
+<script>
+document.querySelectorAll('.example-carousel').forEach(carousel => {
+  const type = carousel.dataset.type; // e.g. "who", "goal"
+  const textEl = carousel.querySelector('.example-text');
+
+  textEl.addEventListener('click', () => {
+    const currentValue = textEl.textContent.trim();
+    const targetSpan = document.getElementById(type);
+
+    if (targetSpan) targetSpan.textContent = currentValue;
+
+<!--    // 🧹 Hide the example box once clicked-->
+<!--    carousel.parentElement.classList.add('hidden');-->
+
+<!--    // ✨ Quick yellow flash for confirmation-->
+<!--    targetSpan.classList.add('bg-yellow-200');-->
+<!--    setTimeout(() => targetSpan.classList.remove('bg-yellow-200'), 400);-->
+
+<!--    // 🔜 Automatically advance to next step (optional)-->
+<!--    if (typeof goForward === 'function') goForward();-->
+  });
+});
+</script>
+
+
+
+
+
 </html>
