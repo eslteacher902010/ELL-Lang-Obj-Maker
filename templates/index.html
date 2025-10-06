@@ -49,6 +49,22 @@
        Copy Objective
     </button>
 
+  <!-- Agentic AI Floating Helper -->
+<div id="agentic-ai-helper"
+  class="fixed bottom-6 left-6 bg-white border border-gray-300 shadow-lg rounded-2xl p-4 max-w-xs flex items-start gap-3 animate-fade-in">
+  <div class="text-2xl">🤖</div>
+  <div>
+    <p class="text-gray-800 text-sm font-medium mb-2">
+      Hey! Want to find articles about your lesson topic?
+    </p>
+    <button id="agentic-ai-button"
+      class="text-sm bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors">
+      Find Articles
+    </button>
+  </div>
+</div>
+
+
 
 
 <nav class="flex items-center justify-center mt-8">
@@ -119,6 +135,7 @@
 
 <div id="sidebar-section" class="hidden flex min-h-screen mt-20">
    <div class="w-64 bg-gray-50 border-r border-gray-200 text-gray-800">
+     <p id="sidebar-title" class="px-4 pt-4 text-sm font-semibold text-gray-700"></p>
        <p class="px-4 pt-4 text-xs text-gray-500 italic">Based on WIDA Rubrics</p>
     <div id="sidebar-content" class="p-4">
       <!-- dynamic content goes here -->
@@ -277,6 +294,9 @@ function canAdvanceFrom(step) {
   const sidebarSection = document.getElementById('sidebar-section'); // wrapper
   const sidebar = document.getElementById('sidebar-content');        // inner content
 
+  const sidebarTitle = document.getElementById('sidebar-title');
+
+
   // Steps that actually need the sidebar
   const sidebarSteps = ['function', 'domain', 'forms', 'supports'];
 
@@ -291,6 +311,7 @@ function canAdvanceFrom(step) {
 
   switch (step) {
     case 'function':
+     sidebarTitle.textContent = 'Choose a Function';
       sidebar.innerHTML = `
         <ul class="space-y-4">
           <li><button onclick="showContent('narrate')" class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">Narrating</button></li>
@@ -302,6 +323,7 @@ function canAdvanceFrom(step) {
       break;
 
     case 'domain':
+    sidebarTitle.textContent = 'Choose a domain';
       sidebar.innerHTML = `
         <ul class="space-y-4">
           <li><button onclick="showDomain('interpretive')" class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">Interpretive</button></li>
@@ -311,6 +333,7 @@ function canAdvanceFrom(step) {
       break;
 
       case 'forms':
+      sidebarTitle.textContent = 'Choose a form';
       sidebar.innerHTML = `
         <ul class="space-y-4">
           <li><button onclick="showForms('structure')" class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">Structure</button></li>
@@ -322,6 +345,7 @@ function canAdvanceFrom(step) {
     break;
 
     case 'supports':
+    sidebarTitle.textContent = 'Choose a support';
       sidebar.innerHTML = `
         <ul class="space-y-4">
           <li><button onclick="showSupports('sensory-supports')" class="category-btn w-full text-left px-4 py-2 hover:bg-gray-100">sensory-supports</button></li>
@@ -731,9 +755,53 @@ if (index !== 0) clearDynamicPanel();
     updateSidebar('supports');
   } else if (index === 6) {
   const preview = document.getElementById("objective-preview");
+  const objectiveText = preview.innerText.trim();
+
+    fetch('/agentic_detect', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ objective: objectiveText })
+  })
+  .then(res => res.json())
+  .then(data => {
+  const aiHelper = document.getElementById("agentic-ai-helper");
+  const aiText = aiHelper.querySelector("p");
+
+  // Display short intro
+  aiText.textContent = `Hey! Looks like your lesson is about ${data.topic}. Want some related articles?`;
+
+  // Limit to 3 article topics only
+  const limited = data.suggestions ? data.suggestions.slice(0, 3) : [];
+
+  // Create a styled list
+  const list = document.createElement("ul");
+  list.className = "mt-2 list-disc ml-6 text-sm text-gray-700";
+
+  limited.forEach(s => {
+    const li = document.createElement("li");
+
+    // Link to a Google search for the suggestion
+    const a = document.createElement("a");
+    a.href = `https://www.google.com/search?q=${encodeURIComponent(s)}`;
+    a.target = "_blank"; // open in new tab
+    a.className = "text-blue-600 hover:underline";
+    a.textContent = s;
+
+    li.appendChild(a);
+    list.appendChild(li);
+  });
+
+  // Append below the AI helper
+  aiHelper.appendChild(list);
+  aiHelper.classList.add("show");
+})
+.catch(err => console.error('Agentic AI failed:', err));
 
   const copyBtn = document.getElementById("copy-button");
   copyBtn.classList.add("show");
+
+  const agenticAI = document.getElementById("agentic-ai-helper");
+  agenticAI.classList.add("show");
 
   preview.classList.add("fullscreen-preview", "fade-in");
 
@@ -916,6 +984,20 @@ main {
   z-index: 9999;
 }
 
+#agentic-ai-helper {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: all 0.4s ease;
+}
+
+#agentic-ai-helper.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  z-index: 9999;
+}
+
 
   .relative {
     position: relative;
@@ -950,6 +1032,42 @@ document.querySelectorAll('.example-carousel').forEach(carousel => {
 });
 </script>
 
+
+<script>
+document.getElementById("agentic-ai-button").addEventListener("click", async () => {
+  const aiText = document.querySelector("#agentic-ai-helper p");
+  const topic = aiText.textContent.match(/about (.*?)\./)?.[1] || "";
+
+  try {
+    const res = await fetch("/find_articles", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ topic })
+    });
+    const data = await res.json();
+
+    aiText.textContent = "Here are some ideas:";
+    const list = document.createElement("ul");
+    list.className = "mt-2 list-disc ml-6 text-sm text-gray-700";
+
+    data.articles.forEach(article => {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = article.url;
+      a.textContent = article.title;
+      a.target = "_blank";
+      a.className = "text-blue-600 hover:underline";
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+
+    aiText.insertAdjacentElement("afterend", list);
+  } catch (err) {
+    console.error("Error fetching articles:", err);
+    aiText.textContent = "Sorry, couldn’t load articles right now.";
+  }
+});
+</script>
 
 
 
