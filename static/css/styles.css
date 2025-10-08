@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 
 /* Container so list aligns with input */
 .suggestions-container {

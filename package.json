@@ -1,0 +1,25 @@
+{
+  "name": "lang_obj_rebuild_revisit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "build-css": "tailwindcss -i ./static/css/syles.css -o ./static/css/output.css",
+    "watch-css": "tailwindcss -i ./static/css/syles.css -o ./static/css/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eslteacher902010/ELL-Lang-Obj-Maker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/eslteacher902010/ELL-Lang-Obj-Maker/issues"
+  },
+  "homepage": "https://github.com/eslteacher902010/ELL-Lang-Obj-Maker#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.4.13"
+  }
+}

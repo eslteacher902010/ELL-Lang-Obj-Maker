@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
   <title>WIDA Objective Builder</title>
 
 </head>
 <body>
-<header>
+<header class="bg-header text-gray-900 py-4 px-6 shadow-md">
   <div class="text-xl font-bold text-gray-900">WIDA Objective Builder</div>
   <nav class="flex space-x-6">
     <a href="#" class="text-gray-700 hover:text-blue-600">Home</a>
@@ -171,9 +171,16 @@
 
  <button
   id="next-button"
-  class="fixed bottom-8 right-8 px-6 py-2 bg-orange-400 hover:bg-orange-500 text-white font-semibold rounded-md shadow-md transition-colors duration-300"
+  class="fixed bottom-4 right-8 px-6 py-2 bg-orange-400 hover:bg-orange-500 text-white font-semibold rounded-md shadow-md transition-colors duration-300"
   onclick="goForward()">
   Next &raquo;
+</button>
+
+  <button
+  id="back-button"
+  class="fixed bottom-4 left-8 px-6 py-2 bg-orange-400 hover:bg-orange-500 text-white font-semibold rounded-md shadow-md transition-colors duration-300"
+  onclick="goBackward()">
+  &laquo; Back
 </button>
 
 
@@ -202,6 +209,7 @@
 
 
 </main>
+
 
 <!-- ================= SCRIPTS ================= -->
 <script>
@@ -574,33 +582,56 @@ function showContent(type) {
 function showDomain(type) {
   const panel = document.getElementById("dynamic-panel");
   let domain = [];
+
   switch (type) {
-    case "interpretive": domain = ["LISTENING", "READING"]; break;
-    case "expressive":   domain = ["WRITING", "SPEAKING"]; break;
-    default:             domain = ["No details available."];
+    case "interpretive":
+      domain = ["LISTENING", "READING"];
+      break;
+    case "expressive":
+      domain = ["WRITING", "SPEAKING"];
+      break;
+    default:
+      domain = ["No details available."];
   }
 
-  panel.innerHTML = `
-    ${domain.map(d => `
-      <button class="bg-blue-200 px-5 py-5 rounded text-center uppercase hover:bg-blue-300
-                     text-center uppercase mr-2 mb-5 truncate rounded-md hover:bg-[#d7e4ea]"
-              onclick="setValue('domain','${d.toLowerCase()}')">
-        ${d}
-      </button>
-    `).join("")}
+  // 🧱 1. Build structure if not already present
+  if (!panel.querySelector("#domain-grid")) {
+    panel.innerHTML = `
+      <div id="domain-grid" class="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-4 mb-6"></div>
 
-    <div class="mt-4  pt-4">
-      <label for="custom-domain" class="block text-sm font-medium mb-1">Add your own:</label>
-      <input id="custom-domain"
-             type="text"
-             placeholder="Enter custom domain"
-             class="w-full border rounded p-2"
-             oninput="updateField('domain', this.value); fetchSuggestions(this.value, 'domain-suggestions','domain')" />
-      <ul id="domain-suggestions" class="suggestions-list mt-2"></ul>
-    </div>
-  `;
+      <div id="custom-domain-area" class="border-t mt-6 pt-4">
+        <label for="custom-domain" class="block text-sm font-medium mb-1">Add your own domain:</label>
+        <div class="flex space-x-2">
+          <input id="custom-domain"
+                 type="text"
+                 placeholder="Enter custom domain"
+                 class="flex-1 border rounded p-2"
+                 oninput="updateField('domain', this.value); fetchSuggestions(this.value, 'domain-suggestions','domain')" />
+          <button id="use-domain-btn"
+                  class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                  onclick="useCustomDomain()">Use</button>
+        </div>
+        <ul id="domain-suggestions" class="suggestions-list mt-2"></ul>
+      </div>
+    `;
+  }
+
+  // 🧱 2. Just update the grid part
+  const grid = panel.querySelector("#domain-grid");
+  grid.innerHTML = domain
+    .map(
+      (d) => `
+        <button
+          class="bg-blue-200 px-5 py-5 rounded text-center uppercase hover:bg-blue-300 mr-2 mb-5 truncate hover:bg-[#d7e4ea]"
+          onclick="setValue('domain','${d.toLowerCase()}')">
+          ${d}
+        </button>
+      `
+    )
+    .join("");
 }
 </script>
+
 
 <!-- Show forms -->
 <script>
@@ -628,7 +659,7 @@ function showForms(type) {
       `).join("")}
     </div>
 
-    <div class="mt-4  pt-4">
+    <div class="mt-6  pt-4">
       <label for="custom-forms" class="block text-sm font-medium mb-1">Add your own:</label>
       <input id="custom-forms"
              type="text"
@@ -665,7 +696,7 @@ function showSupports(type) {
       `).join("")}
     </div>
 
-    <div class="mt-4 pt-4">
+    <div class="mt-6 pt-4">
       <label for="custom-supports" class="block text-sm font-medium mb-1">Add your own:</label>
       <input id="custom-supports"
              type="text"
@@ -867,6 +898,18 @@ function goForward() {
     nextStep(currentStep);
   }
 }
+// move backward
+function goBackward() {
+  // Prevent moving before the first step
+  if (currentStep === 0) {
+    alert("You're already at the first step.");
+    return;
+  }
+
+  // Move one step back
+  currentStep--;
+  nextStep(currentStep);
+}
 
 // initial call
 nextStep(currentStep);
@@ -879,6 +922,11 @@ nextStep(currentStep);
 </body>
 
 <style>
+
+  body{
+    background-color: #d3d3d3
+    }
+
   .step.active span:first-child {
   color: #2563eb; /* Tailwind blue-600 */
   border-bottom: 3px solid #2563eb;
@@ -925,9 +973,38 @@ nextStep(currentStep);
   transition: visibility 0s 0.2s; /* Hide immediately, but show with a delay (if desired) */
 }
 
+#dynamic-panel {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 6rem;
+  background-color: oklch(98.5% 0 0) ;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+
+
 #dynamic-panel button {
   min-height: 60px; /* or whatever looks good */
 }
+
+#next-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+}
+
+#back-button {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  z-index: 1000;
+}
+
+
+
+
 
 .suggestions-list {
   list-style: none;    /* kill bullets */
@@ -940,12 +1017,17 @@ nextStep(currentStep);
 
     header {
   flex: 0 0 72px;        /* lock header height */
-  background: #fff;      /* or whatever color */
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   position: relative;    /* no sticky/fixed */
   z-index: 10;
   padding: 0 1rem;
 }
+
+header.bg-header {
+  background-color: oklch(87.2% 0.01 258.338);
+}
+
+
 main {
   flex: 1 1 auto;        /* main content fills the rest */
   overflow-y: auto;      /* scrolls inside main if too tall */
@@ -1037,10 +1119,12 @@ main {
 
 #sidebar-section {
   position: absolute;
-  top: 3.5rem; /* just below your header */
+  top: 4.5rem;
   left: 0;
   width: 100%;
 }
+
+
 
 </style>
 
