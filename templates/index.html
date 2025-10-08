@@ -133,7 +133,7 @@
 </nav>
 
 
-<div id="sidebar-section" class="hidden flex min-h-screen mt-20">
+<div id="sidebar-section" class="hidden flex mt-20">
    <div class="w-64 bg-gray-50 border-r border-gray-200 text-gray-800">
      <p id="sidebar-title" class="px-4 pt-4 text-sm font-semibold text-gray-700"></p>
        <p class="px-4 pt-4 text-xs text-gray-500 italic">Based on WIDA Rubrics</p>
@@ -145,7 +145,8 @@
   <div id="dynamic-panel" class="flex-1 bg-white p-10"></div>
 </div>
 
-  <div id="full-panel" class="hidden bg-white p-10"></div>
+  <div id="full-panel" class="hidden bg-white p-6"></div>
+
 
   <div id="who-example" class="hidden example-hint-who">
     <div class="example-carousel flex items-center justify-center space-x-4" data-type="who">
@@ -405,6 +406,9 @@ function setValue(fieldId, value) {
 <script>
 function showWhoInput(targetId = "dynamic-panel")  {
   const panel = document.getElementById(targetId);
+
+  // Prevent duplicates
+  if (panel.querySelector("#who-input")) return;
   panel.innerHTML = `
     <div class="flex flex-col space-y-2">
       <div class="flex items-center space-x-2">
@@ -728,9 +732,14 @@ const steps = document.querySelectorAll("#steps .step");
 let currentStep = 0;
 
 function nextStep(index) {
+  // 🔹 Clear dynamic content if not the first step
+  if (index !== 0) clearDynamicPanel();
 
-if (index !== 0) clearDynamicPanel();
+  // 🧹 Always hide example hints when changing steps
+  document.getElementById("who-example").classList.add("hidden");
+  document.getElementById("goal-example").classList.add("hidden");
 
+  // 🔹 Update visual step indicators
   steps.forEach((step, i) => {
     step.classList.remove("active", "completed", "disabled");
 
@@ -745,26 +754,35 @@ if (index !== 0) clearDynamicPanel();
     }
   });
 
-  // update the sidebar
-    if (index === 0) {
+  //Step logic
+  if (index === 0) {
+    // Step 0: WHO
     document.getElementById('sidebar-section').classList.add('hidden');
     document.getElementById('full-panel').classList.remove('hidden');
     showWhoInput("full-panel");
+
   } else if (index === 1) {
+    // Step 1: FUNCTION
+    document.getElementById('full-panel').classList.add('hidden');
     updateSidebar('function');
+
   } else if (index === 2) {
+    // Step 2: GOAL
     document.getElementById('sidebar-section').classList.add('hidden');
     document.getElementById('full-panel').classList.remove('hidden');
     showGoalInput("full-panel");
-  } else if (index === 3) {
-    updateSidebar('domain');
-  } else if (index === 4) {
-    updateSidebar('forms');
-  } else if (index === 5) {
-    updateSidebar('supports');
+
+  } else if (index >= 3 && index <= 5) {
+    // Steps 3–5: DOMAIN / FORMS / SUPPORTS
+    document.getElementById('full-panel').classList.add('hidden');
+    updateSidebar(['domain', 'forms', 'supports'][index - 3]);
+
   } else if (index === 6) {
-  const preview = document.getElementById("objective-preview");
-  const objectiveText = preview.innerText.trim();
+    // Step 6: FINISHED LO
+    document.getElementById('full-panel').classList.add('hidden');
+
+    const preview = document.getElementById("objective-preview");
+    const objectiveText = preview.innerText.trim();
 
     fetch('/agentic_detect', {
     method: 'POST',
@@ -861,9 +879,12 @@ nextStep(currentStep);
 </body>
 
 <style>
-  .step.active {
-  display: block;
+  .step.active span:first-child {
+  color: #2563eb; /* Tailwind blue-600 */
+  border-bottom: 3px solid #2563eb;
+  transition: all 0.3s ease;
 }
+
 .step.completed {
   display: block;
   opacity: 0.6;
@@ -1014,6 +1035,12 @@ main {
     overflow: visible;
 }
 
+#sidebar-section {
+  position: absolute;
+  top: 3.5rem; /* just below your header */
+  left: 0;
+  width: 100%;
+}
 
 </style>
 
