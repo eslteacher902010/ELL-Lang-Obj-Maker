@@ -88,6 +88,46 @@ def agentic_detect():
     return jsonify({"topic": topic})
 
 
+@app.route("/agentic_intro", methods=["GET"])
+def agentic_intro():
+    """
+    Suggests current trending classroom topics or themes teachers are teaching this month.
+    """
+    completion = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "You are an education trend analyst. "
+                    "List 5 topics teachers are commonly teaching in K–12 classrooms this month. "
+                    "Be diverse across subjects (ELA, science, math, social studies, ESL). "
+                    "Return ONLY a valid JSON array of strings, no markdown, no explanation, no code fences."
+                ),
+            },
+            {"role": "user", "content": "What are teachers teaching this month?"},
+        ],
+        temperature=0.7,
+    )
+
+    import json
+    text = completion.choices[0].message.content.strip()
+
+    # 🧠 Cleanly parse GPT output even if it includes code fences
+    if text.startswith("```"):
+        text = text.strip("`").replace("json", "").strip()
+
+    try:
+        topics = json.loads(text)
+    except Exception:
+        # fallback: handle bullet points or comma-separated text
+        topics = [t.strip("•- \n") for t in text.split("\n") if t.strip()]
+
+    # ✅ Always return as proper JSON
+    return jsonify({"topics": topics})
+
+
+
 @app.route("/find_articles", methods=["POST"])
 def find_articles():
     data = request.get_json()
