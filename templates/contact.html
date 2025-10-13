@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | WIDA Objective Builder</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center min-h-screen">
+
+  <div class="bg-white shadow-lg rounded-2xl p-8 max-w-md w-full text-center border border-gray-200">
+    <h1 class="text-2xl font-semibold text-gray-800 mb-4">Contact Email</h1>
+    <p class="text-lg text-gray-700 mb-6">
+      Click below to copy my email address:
+    </p>
+
+    <button
+      id="copyBtn"
+      class="inline-block bg-blue-600 text-white font-semibold px-6 py-2 rounded-md shadow-md hover:bg-blue-700 transition-colors duration-200"
+    >
+      Copy Email
+    </button>
+
+    <p id="copiedMsg" class="text-green-600 mt-4 text-sm hidden">📋 Email copied!</p>
+  </div>
+
+  <script>
+    document.getElementById("copyBtn").addEventListener("click", () => {
+      const email = "greenandbluesalamander@gmail.com";
+      navigator.clipboard.writeText(email)
+        .then(() => {
+          const msg = document.getElementById("copiedMsg");
+          msg.classList.remove("hidden");
+          msg.textContent = "📋 " + email + " copied!";
+          setTimeout(() => msg.classList.add("hidden"), 3000);
+        })
+        .catch(err => console.error("Failed to copy email:", err));
+    });
+  </script>
+</body>
+</html>

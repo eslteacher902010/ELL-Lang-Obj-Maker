@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation_css.css') }}">
   <script src="{{ url_for('static', filename='js/aiSuggestions.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/carousel.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/dynamic-panel.js') }}" defer></script>
@@ -14,17 +15,15 @@
   <title>WIDA Objective Builder</title>
 </head>
 
-
-</head>
 <body>
-<header class="bg-header text-gray-900 py-4 px-6 shadow-md">
-  <div class="text-xl font-bold text-gray-900">WIDA Objective Builder</div>
-  <nav class="flex space-x-6">
-    <a href="#" class="text-gray-700 hover:text-blue-600">Home</a>
-    <a href="#" class="text-gray-700 hover:text-blue-600">About</a>
-    <a href="#" class="text-gray-700 hover:text-blue-600">Contact</a>
-  </nav>
-</header>
+  <header class="bg-header text-gray-900 py-4 px-6 shadow-md">
+    <div class="text-xl font-bold text-gray-900">WIDA Objective Builder</div>
+    <nav class="flex space-x-6">
+      <a href="{{ url_for('index') }}" class="text-gray-700 hover:text-blue-600">Home</a>
+      <a href="{{ url_for('about') }}" class="text-gray-700 hover:text-blue-600">About</a>
+      <a href="{{ url_for('contact') }}" class="text-gray-700 hover:text-blue-600">Contact</a>
+    </nav>
+  </header>
 
 <main>
 
@@ -88,7 +87,7 @@
   <ul id="steps" class="flex items-center space-x-6">
     <li>
       <div id="step-0" class="step flex items-center space-x-2 cursor-pointer">
-        <span class="text-sm font-semibold uppercase text-gray-900 border-b-2 border-blue-500 pb-1">
+        <span class="step-label text-sm uppercase pb-1">
           Who?
         </span>
         <span class="text-gray-400">&gt;</span>
@@ -97,7 +96,7 @@
 
     <li>
       <div id="step-1" class="step flex items-center space-x-2 cursor-pointer">
-        <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
+        <span class="step-label text-sm uppercase pb-1">
           What?
         </span>
         <span class="text-gray-400">&gt;</span>
@@ -115,7 +114,7 @@
 
     <li>
       <div id="step-3" class="step flex items-center space-x-2 cursor-pointer">
-        <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
+        <span class="step-label text-sm uppercase pb-1">
           Domain
         </span>
         <span class="text-gray-400">&gt;</span>
@@ -228,6 +227,14 @@
 </button>
 
 
+<button
+  id="restart-button"
+  class="fixed bottom-8 right-1/2 translate-x-1/2 px-6 py-2 bg-white text-green-800
+         font-semibold rounded-md shadow-lg hover:bg-gray-200 border border-green-700
+         transition-all duration-300 hidden"
+  onclick="restartApp()">
+  🔁 Restart
+</button>
 
 
 

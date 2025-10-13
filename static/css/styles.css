@@ -102,7 +102,6 @@ main {
   justify-content: center;
   z-index: 50;
   transition: all 0.8s ease-in-out;
-  font-size: 1rem;
 }
 
 .fullscreen-preview span {
@@ -219,3 +218,33 @@ main {
   transition: all 0.4s ease;
 }
 
+
+#objective-preview.fullscreen-preview {
+  font-size: 1.5rem !important;
+}
+
+#objective-preview.fullscreen-preview span {
+  font-size: inherit;
+}
+
+
+#restart-button {
+  position: fixed !important;
+  bottom: 2rem !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background-color: #ffffff !important;
+  color: #065f46 !important;
+  font-weight: 600 !important;
+  padding: 0.75rem 1.5rem !important;
+  border: 2px solid #065f46 !important;
+  border-radius: 0.75rem !important;
+  z-index: 100000 !important;  /* 🚀 sits above everything */
+  pointer-events: auto !important;
+  display: none;
+}
+
+#restart-button.show,
+#restart-button:not(.hidden) {
+  display: block !important;
+}

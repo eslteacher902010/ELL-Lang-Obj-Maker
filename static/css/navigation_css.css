@@ -44,3 +44,16 @@
   border-bottom: 3px solid #2563eb;
   transition: all 0.3s ease;
 }
+
+.step.completed span:first-child {
+  color: #16a34a; /* Tailwind green-600 */
+  border-bottom: 3px solid #16a34a;
+  transition: all 0.3s ease;
+}
+
+.step.disabled span:first-child {
+  color: #9ca3af; /* Tailwind gray-400 */
+  border-bottom: 3px solid transparent;
+}
+
+
