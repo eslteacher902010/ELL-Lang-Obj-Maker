@@ -203,13 +203,28 @@
 
 <!-- ==== Bottom Action Buttons ==== -->
 <div id="bottom-actions">
-  <button id="restart-button" onclick="restartApp()">🔁 Restart</button>
+ <button id="restart-button" onclick="restartApp()" class="flex items-center gap-2">
+  <img src="{{ url_for('static', filename='icons/1F503.svg') }}"
+       alt="restart" width="30" height="30" style="vertical-align:middle;">
+  Restart
+</button>
 
-  <a id="wida-btn" href="#" class="btn-wida hidden">
-    📚 See WIDA Resources Related to Your Lesson
-  </a>
 
-  <button id="copy-button">📋 Copy Objective</button>
+  <a id="wida-btn" href="#" class="btn-wida hidden flex items-center gap-2">
+  <img src="{{ url_for('static', filename='icons/1F4DA.svg') }}"
+       alt="WIDA resources" width="30" height="30" class="inline-block align-middle">
+  <span class="sr-only">📚</span>
+  See WIDA Resources Related to Your Lesson
+</a>
+
+
+
+  <button id="copy-button" class="flex items-center gap-2">
+  <img src="{{ url_for('static', filename='icons/1F4CB.svg') }}"
+       alt="Copy icon" width="30" height="30" class="inline-block align-middle">
+  Copy Objective
+</button>
+
 </div>
 
 

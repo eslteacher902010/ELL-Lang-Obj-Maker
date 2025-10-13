@@ -1,6 +1,8 @@
 const steps = document.querySelectorAll(".step");
 let currentStep = 0;
 
+const widaBtn = document.getElementById("wida-btn");
+
 
 function restartApp() {
   location.reload(); // simplest restart — full reset
@@ -78,11 +80,31 @@ function nextStep(index) {
 
     const lessonTopic = sessionStorage.getItem("final_topic") || window.finalTopic || null;
 
-    if (lessonTopic) {
-      widaBtn.href = `/wida_resources/${encodeURIComponent(lessonTopic)}`;
-      widaBtn.classList.remove("hidden");
-    } else {
-      console.warn("No lesson topic found — cannot auto search WIDA resources");
+    const widaBtn = document.getElementById("wida-btn");
+
+if (widaBtn) {
+  widaBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    const preview = document.getElementById("objective-preview");
+    const rawObjective = preview ? preview.innerText.trim() : "";
+
+    // Strip unnecessary parts like "will be able to"
+    const stripped = rawObjective
+      .replace(/will be able to/gi, "")
+      .replace(/[.,]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    if (!stripped) {
+      alert("No objective text found to prefill.");
+      return;
+    }
+
+    // Just redirect — but include stripped objective as query param
+    const prefillParam = encodeURIComponent(stripped);
+    window.location.href = `/wida_resources?prefill=${prefillParam}`;
+  });
 }
 
     const restartBtn = document.getElementById("restart-button");
