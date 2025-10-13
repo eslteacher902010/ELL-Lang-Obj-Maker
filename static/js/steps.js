@@ -101,10 +101,13 @@ function nextStep(index) {
       .then((data) => {
         const aiHelper = document.getElementById("agentic-ai-helper");
         const aiText = aiHelper.querySelector("p");
-
         const aiButton = document.getElementById("agentic-ai-button");
-        aiButton.textContent = "Find Articles";
-        aiButton.dataset.mode = "articles";
+
+         window.finalTopic = data.topic;
+         aiButton.dataset.topic = data.topic;
+         aiButton.dataset.mode = "articles";
+
+
         // Display short intro
         aiText.textContent = `Hey! Looks like your lesson is about ${data.topic}. Want some related articles?`;
 
@@ -215,6 +218,11 @@ const aiText = document.querySelector("#agentic-ai-helper p");
 
 aiButton.replaceWith(aiButton.cloneNode(true));
 const newAiButton = document.getElementById("agentic-ai-button");
+
+if (window.finalTopic) {
+  newAiButton.dataset.topic = window.finalTopic;
+}
+newAiButton.dataset.mode = aiButton.dataset.mode || "intro";
 
 newAiButton.addEventListener("click", async () => {
   const mode = newAiButton.dataset.mode;
