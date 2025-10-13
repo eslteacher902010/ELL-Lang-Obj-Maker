@@ -25,21 +25,19 @@
 
   <div class="max-w-3xl mx-auto mt-8 space-y-6">
     {% if articles %}
-      {% for article in articles %}
-        <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition">
-          <h2 class="text-xl font-semibold text-indigo-700 flex items-center">
-            <a href="{{ article.url }}" target="_blank" rel="noopener noreferrer" class="hover:underline flex items-center">
-              📘 {{ article.title }}
-              <svg xmlns="http://www.w3.org/2000/svg"
-                   class="h-4 w-4 ml-2 text-gray-500 group-hover:text-indigo-400"
-                   fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M14 3h7m0 0v7m0-7L10 14m4 7H3a2 2 0 01-2-2V7a2 2 0 012-2h7"/>
-              </svg>
-            </a>
-          </h2>
-        </div>
-      {% endfor %}
+      {% for article, summary in articles %}
+  <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition">
+    <h2 class="text-xl font-semibold text-indigo-700 flex items-center">
+      <a href="{{ article.url }}" target="_blank" rel="noopener noreferrer" class="hover:underline flex items-center">
+        📘 {{ article.title }}
+      </a>
+    </h2>
+    <p class="mt-2 text-gray-600 text-sm leading-relaxed">
+      {{ summary }}
+    </p>
+  </div>
+{% endfor %}
+
     {% else %}
       <p class="text-center text-gray-500 mt-8 italic">
         No results yet. Try searching for a WIDA topic above.

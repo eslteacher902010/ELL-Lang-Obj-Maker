@@ -22,16 +22,10 @@ def wida_resources():
     articles = fetch_wida_articles(topic)
     print("Fetched articles:", articles)
 
-    summaries = []
-    for a in articles:
-        try:
-            summaries.append(summarize_with_ollama(a))
-        except Exception as e:
-            print("Ollama error:", e)
-            summaries.append("(Summary unavailable)")
-
+    summaries = [summarize_text(a["title"]) for a in articles]
     combined = zip(articles, summaries)
     return render_template("wida_resources.html", articles=combined, topic=topic)
+
 
 
 def fetch_wida_articles(topic):
@@ -57,23 +51,56 @@ def fetch_wida_articles(topic):
     print(f"Articles found (generated links): {len(articles)}")
     return articles
 
-def summarize_with_ollama(text):
+def summarize_text(text):
+    """Use Ollama locally, fallback to OpenAI in production or if Ollama fails."""
+    # Try Ollama first
     try:
+        print("🧠 Trying Ollama locally...")
         res = requests.post(
             "http://localhost:11434/api/chat",
             json={
                 "model": "llama3",
                 "messages": [
-                    {"role": "system", "content": "You are a teaching assistant summarizing WIDA materials for ESL educators."},
-                    {"role": "user", "content": f"Summarize this WIDA article:\n\n{text}"}
-                ]
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are a teaching assistant summarizing WIDA materials "
+                            "for ESL educators in one short paragraph."
+                        ),
+                    },
+                    {"role": "user", "content": f"Summarize this WIDA resource:\n\n{text}"},
+                ],
             },
-            timeout=10
+            timeout=6,
         )
+        res.raise_for_status()
         data = res.json()
-        return data.get("message", {}).get("content", "(Summary unavailable)")
+        if "message" in data and "content" in data["message"]:
+            return data["message"]["content"]
+        print("⚠️ Ollama returned unexpected response — falling back.")
     except Exception as e:
-        print("Ollama error:", e)
+        print("❌ Ollama unavailable or failed:", e)
+
+    # Fallback to OpenAI
+    try:
+        print("🌐 Falling back to OpenAI (production or backup)...")
+        completion = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a teaching assistant summarizing WIDA resources for ESL educators. "
+                        "Write one short paragraph summary."
+                    ),
+                },
+                {"role": "user", "content": text},
+            ],
+            temperature=0.5,
+        )
+        return completion.choices[0].message.content.strip()
+    except Exception as e:
+        print("⚠️ OpenAI fallback also failed:", e)
         return "(Summary unavailable)"
 
 
