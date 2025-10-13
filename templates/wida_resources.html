@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WIDA Resources</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+
+  <h1 class="text-3xl font-bold text-center mt-10 text-indigo-700">WIDA Resource Finder</h1>
+
+  <form action="{{ url_for('wida_resources') }}" method="get" class="text-center mt-6">
+    <input
+      type="text"
+      name="topic"
+      placeholder="Enter a WIDA-related topic (e.g., academic language, scaffolding)"
+      class="border border-gray-300 rounded-lg p-2 w-2/3 focus:ring focus:ring-indigo-200"
+      value="{{ topic }}"
+    >
+    <button type="submit"
+      class="ml-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-lg transition">
+      Search
+    </button>
+  </form>
+
+  <div class="max-w-3xl mx-auto mt-8 space-y-6">
+    {% if articles %}
+      {% for article in articles %}
+        <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition">
+          <h2 class="text-xl font-semibold text-indigo-700 flex items-center">
+            <a href="{{ article.url }}" target="_blank" rel="noopener noreferrer" class="hover:underline flex items-center">
+              📘 {{ article.title }}
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   class="h-4 w-4 ml-2 text-gray-500 group-hover:text-indigo-400"
+                   fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M14 3h7m0 0v7m0-7L10 14m4 7H3a2 2 0 01-2-2V7a2 2 0 012-2h7"/>
+              </svg>
+            </a>
+          </h2>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-center text-gray-500 mt-8 italic">
+        No results yet. Try searching for a WIDA topic above.
+      </p>
+    {% endif %}
+  </div>
+
+</body>
+</html>

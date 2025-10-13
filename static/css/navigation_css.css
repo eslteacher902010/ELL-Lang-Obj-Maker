@@ -1,16 +1,86 @@
-.step.completed {
-  display: block;
-  opacity: 0.6;
+/* Step Navigation Wrapper */
+#step-nav {
+  background-color: #d1d1d1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* keep buttons on sides */
+  padding: 0 2rem;
+  height: 72px;
+  position: relative;
+}
+
+/* Buttons */
+#back-button,
+#next-button {
+  background-color: #fb923c;
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.6rem 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+  flex-shrink: 0; /* 👈 prevents stretching in flexbox */
+  height: auto;
+  width: auto;
+}
+
+#back-button:hover,
+#next-button:hover {
+  transform: scale(1.05);
+  background-color: #f97316;
+}
+
+/* Steps section centered */
+#steps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  flex-shrink: 0;
 }
 
 
- .step.disabled {
-  opacity: 0.4;              /* greyed out look */
-  pointer-events: none;       /* blocks all clicks */
-  cursor: not-allowed;        /* cursor shows blocked hand */
-  color: #bbb;                /* lighter text */
+/* ----- Step States ----- */
+#step-nav {
+  background-color: #d1d1d1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 72px;
+
+  position: sticky;  /* stays visible when scrolling */
+  top: -10;            /* 👈 pins it to the very top */
+  z-index: 50;       /* ensures it’s above other layers */
+
+  margin: 0;         /* removes default browser margin */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* optional: soft shadow */
 }
 
+.step.completed span:first-child {
+  color: #16a34a !important; /* Tailwind green-600 */
+  border-bottom: 3px solid #16a34a !important;
+  transition: all 0.3s ease;
+}
+
+.step.active span:first-child {
+  color: #2563eb !important; /* Tailwind blue-600 */
+  border-bottom: 3px solid #2563eb !important;
+  transition: all 0.3s ease;
+}
+
+.step.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+  cursor: not-allowed;
+  color: #bbb;
+}
+
+/* Tooltip on hover for disabled */
 .step.disabled:hover::after {
   content: "Complete the current step first";
   position: absolute;
@@ -24,36 +94,3 @@
   transform: translateX(-50%);
   white-space: nowrap;
 }
-
-#next-button {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 1000;
-}
-
-#back-button {
-  position: fixed;
-  bottom: 2rem;
-  left: 2rem;
-  z-index: 1000;
-}
-
-  .step.active span:first-child {
-  color: #2563eb; /* Tailwind blue-600 */
-  border-bottom: 3px solid #2563eb;
-  transition: all 0.3s ease;
-}
-
-.step.completed span:first-child {
-  color: #16a34a; /* Tailwind green-600 */
-  border-bottom: 3px solid #16a34a;
-  transition: all 0.3s ease;
-}
-
-.step.disabled span:first-child {
-  color: #9ca3af; /* Tailwind gray-400 */
-  border-bottom: 3px solid transparent;
-}
-
-

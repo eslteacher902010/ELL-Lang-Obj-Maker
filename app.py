@@ -1,10 +1,10 @@
 import os
 
-import openai
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify, render_template
 from openai import OpenAI
 import requests
+
 
 load_dotenv()
 print("Key loaded?", os.getenv("OPENAI_API_KEY"))
@@ -12,6 +12,72 @@ print("Key loaded?", os.getenv("OPENAI_API_KEY"))
 app = Flask(__name__)
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+@app.route("/wida_resources")
+def wida_resources():
+    topic = request.args.get("topic", "").strip()
+    if not topic:
+        return render_template("wida_resources.html", articles=[], topic="")
+
+    articles = fetch_wida_articles(topic)
+    print("Fetched articles:", articles)
+
+    summaries = []
+    for a in articles:
+        try:
+            summaries.append(summarize_with_ollama(a))
+        except Exception as e:
+            print("Ollama error:", e)
+            summaries.append("(Summary unavailable)")
+
+    combined = zip(articles, summaries)
+    return render_template("wida_resources.html", articles=combined, topic=topic)
+
+
+def fetch_wida_articles(topic):
+    """Return curated Google search links for WIDA-related academic content."""
+    base = "https://www.google.com/search?q="
+    encoded_topic = requests.utils.quote(topic)
+
+    articles = [
+        {
+            "title": f"WIDA research and guidance on {topic}",
+            "url": f"{base}site:wida.wisc.edu+{encoded_topic}",
+        },
+        {
+            "title": f"WIDA lesson frameworks and instructional plans for {topic}",
+            "url": f"{base}site:wida.wisc.edu+{encoded_topic}+lesson+plan",
+        },
+        {
+            "title": f"WIDA educator resources and classroom strategies for {topic}",
+            "url": f"{base}site:wida.wisc.edu+{encoded_topic}+resources",
+        },
+    ]
+
+    print(f"Articles found (generated links): {len(articles)}")
+    return articles
+
+def summarize_with_ollama(text):
+    try:
+        res = requests.post(
+            "http://localhost:11434/api/chat",
+            json={
+                "model": "llama3",
+                "messages": [
+                    {"role": "system", "content": "You are a teaching assistant summarizing WIDA materials for ESL educators."},
+                    {"role": "user", "content": f"Summarize this WIDA article:\n\n{text}"}
+                ]
+            },
+            timeout=10
+        )
+        data = res.json()
+        return data.get("message", {}).get("content", "(Summary unavailable)")
+    except Exception as e:
+        print("Ollama error:", e)
+        return "(Summary unavailable)"
+
+
+
 
 
 @app.route("/")

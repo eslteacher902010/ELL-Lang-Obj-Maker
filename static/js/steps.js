@@ -1,36 +1,15 @@
 const steps = document.querySelectorAll(".step");
 let currentStep = 0;
 
-//function enlargeHeaderTitle() {
-//  console.log("enlargeHeaderTitle fired ✅");
-//  const preview = document.getElementById("objective-preview");
-//  if (!preview) return; // safety check
-//
-//  // Remove smaller font classes
-//  preview.classList.remove("text-xl", "text-2xl", "text-3xl", "text-4xl");
-//
-//  // Add new large size, color, and smooth transition
-//  preview.classList.add(
-//    "inline-block",
-//    "transform",
-//    "text-8xl",          // 🚀 enormous size
-//    "text-yellow-400",   // brighter highlight
-//    "drop-shadow-[0_0_20px_rgba(255,255,0,0.8)]", // glowing halo
-//    "transition-all",
-//    "duration-1000",
-//    "ease-in-out",
-//    "scale-125"          // extra zoom
-//  );
-//}
 
 function restartApp() {
   location.reload(); // simplest restart — full reset
 }
 
+
 function nextStep(index) {
   // Clear dynamic content if not the first step
   if (index !== 0) clearDynamicPanel();
-  adjustButtonPosition();
 
   // Always hide example hints when changing steps
   document.getElementById("who-example").classList.add("hidden");
@@ -63,6 +42,9 @@ function nextStep(index) {
     const aiHelper = document.getElementById("agentic-ai-helper");
     const aiText = aiHelper.querySelector("p");
     const aiButton = document.getElementById("agentic-ai-button");
+    aiHelper.classList.remove("hide");
+    aiButton.dataset.mode = "intro";
+    aiButton.dataset.topic = "";
 
     aiText.textContent =
       "Hi! Can’t think of what to teach today? Let's see what teachers are teaching these days.";
@@ -85,9 +67,23 @@ function nextStep(index) {
   } else if (index === 6) {
     // Step 6: FINISHED LO
     document.getElementById("full-panel").classList.add("hidden");
-    // setTimeout(enlargeHeaderTitle, 800); // delay
     document.getElementById("next-button").classList.add("hidden");
     document.getElementById("back-button").classList.add("hidden");
+    const stepNav = document.getElementById("step-nav");
+    if (stepNav) stepNav.style.display = "none";
+
+    const bottomBar = document.getElementById("bottom-actions");
+    bottomBar.classList.add("show");
+
+
+    const lessonTopic = sessionStorage.getItem("final_topic") || window.finalTopic || null;
+
+    if (lessonTopic) {
+      widaBtn.href = `/wida_resources/${encodeURIComponent(lessonTopic)}`;
+      widaBtn.classList.remove("hidden");
+    } else {
+      console.warn("No lesson topic found — cannot auto search WIDA resources");
+}
 
     const restartBtn = document.getElementById("restart-button");
     restartBtn.classList.remove("hidden");
@@ -179,7 +175,6 @@ function goForward() {
   if (currentStep < steps.length - 1) {
     currentStep++;
     nextStep(currentStep);
-    adjustButtonPosition();
   }
 }
 
@@ -191,7 +186,6 @@ function goBackward() {
   }
   currentStep--;
   nextStep(currentStep);
-  adjustButtonPosition();
 }
 
 // initial call
@@ -215,31 +209,6 @@ function canAdvanceFrom(step) {
   }
 }
 
-// helper to position next buttons
-function adjustButtonPosition() {
-  const nextBtn = document.getElementById("next-button");
-  const backBtn = document.getElementById("back-button");
-  const dynamicPanel = document.getElementById("dynamic-panel");
-  const nav = document.querySelector("nav");
-
-  const panelVisible =
-    !dynamicPanel.classList.contains("hidden") &&
-    dynamicPanel.offsetParent !== null;
-
-  if (panelVisible) {
-    nav.appendChild(backBtn);
-    nav.appendChild(nextBtn);
-    nextBtn.classList.add("in-nav");
-    backBtn.classList.add("in-nav");
-  } else {
-    document.body.appendChild(backBtn);
-    document.body.appendChild(nextBtn);
-    nextBtn.classList.remove("in-nav");
-    backBtn.classList.remove("in-nav");
-    nextBtn.style.bottom = "1.5rem";
-    backBtn.style.bottom = "1.5rem";
-  }
-}
 
 const aiButton = document.getElementById("agentic-ai-button");
 const aiText = document.querySelector("#agentic-ai-helper p");
@@ -284,7 +253,7 @@ newAiButton.addEventListener("click", async () => {
   } else if (mode === "articles") {
     aiText.textContent = "Searching for articles...";
     try {
-      const topic = aiText.textContent.match(/about (.*?)\./)?.[1] || "";
+      const topic = newAiButton.dataset.topic || "";
       const res = await fetch("/find_articles", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

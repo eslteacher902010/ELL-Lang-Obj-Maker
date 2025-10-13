@@ -22,8 +22,10 @@
       <a href="{{ url_for('index') }}" class="text-gray-700 hover:text-blue-600">Home</a>
       <a href="{{ url_for('about') }}" class="text-gray-700 hover:text-blue-600">About</a>
       <a href="{{ url_for('contact') }}" class="text-gray-700 hover:text-blue-600">Contact</a>
+      <a href="{{ url_for('wida_resources') }}" class="text-gray-700 hover:text-blue-600">WIDA Resources</a>
     </nav>
   </header>
+
 
 <main>
 
@@ -52,15 +54,8 @@
 </div>
 
 
-     <button id="copy-button"
-      class="fixed bottom-8 right-8 opacity-0 pointer-events-none px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/30 rounded-lg text-white text-sm font-medium transition-all duration-500 backdrop-blur-sm">
-       Copy Objective
-    </button>
-
   <!-- Agentic AI Floating Helper -->
-<div id="agentic-ai-helper"
-  class="fixed bottom-6 left-6 bg-white border border-gray-300 shadow-lg rounded-2xl p-4 max-w-xs flex items-start gap-3 relative">
-
+<div id="agentic-ai-helper">
   <!-- ✕ Close Button (TOP-RIGHT corner inside the white box) -->
   <button id="ai-close-btn"
     class="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-lg font-bold leading-none">
@@ -82,71 +77,63 @@
   </div>
 </div>
 
+<!-- Step Navigation -->
+<!-- Step Navigation -->
+<nav id="step-nav" class="relative flex items-center justify-between mt-8 mb-4 px-8">
+  <!-- Back Button -->
+  <button id="back-button" onclick="goBackward()">« Back</button>
 
-<nav class="flex items-center justify-center mt-8">
-  <ul id="steps" class="flex items-center space-x-6">
-    <li>
-      <div id="step-0" class="step flex items-center space-x-2 cursor-pointer">
-        <span class="step-label text-sm uppercase pb-1">
-          Who?
-        </span>
-        <span class="text-gray-400">&gt;</span>
-      </div>
-    </li>
+  <!-- Steps (centered section) -->
+  <div class="flex-grow flex justify-center">
+    <ul id="steps" class="flex items-center space-x-6">
+      <li>
+        <div id="step-0" class="step flex items-center space-x-2 cursor-pointer">
+          <span class="step-label text-sm uppercase pb-1">Who?</span>
+          <span class="text-gray-400">&gt;</span>
+        </div>
+      </li>
+      <li>
+        <div id="step-1" class="step flex items-center space-x-2 cursor-pointer">
+          <span class="step-label text-sm uppercase pb-1">What?</span>
+          <span class="text-gray-400">&gt;</span>
+        </div>
+      </li>
+      <li>
+        <div id="step-2" class="step flex items-center space-x-2 cursor-pointer">
+          <span class="text-sm uppercase text-gray-400 hover:text-gray-600">Goal</span>
+          <span class="text-gray-400">&gt;</span>
+        </div>
+      </li>
+      <li>
+        <div id="step-3" class="step flex items-center space-x-2 cursor-pointer">
+          <span class="step-label text-sm uppercase pb-1">Domain</span>
+          <span class="text-gray-400">&gt;</span>
+        </div>
+      </li>
+      <li>
+        <div id="step-4" class="step flex items-center space-x-2 cursor-pointer">
+          <span class="text-sm uppercase text-gray-400 hover:text-gray-600">Forms</span>
+          <span class="text-gray-400">&gt;</span>
+        </div>
+      </li>
+      <li>
+        <div id="step-5" class="step flex items-center space-x-2 cursor-pointer">
+          <span class="text-sm uppercase text-gray-400 hover:text-gray-600">Supports</span>
+          <span class="text-gray-400">&gt;</span>
+        </div>
+      </li>
+      <li>
+        <div id="step-6" class="step flex items-center space-x-2 cursor-pointer">
+          <span class="text-sm uppercase text-gray-400 hover:text-gray-600">Finished LO</span>
+        </div>
+      </li>
+    </ul>
+  </div>
 
-    <li>
-      <div id="step-1" class="step flex items-center space-x-2 cursor-pointer">
-        <span class="step-label text-sm uppercase pb-1">
-          What?
-        </span>
-        <span class="text-gray-400">&gt;</span>
-      </div>
-    </li>
-
-    <li>
-      <div id="step-2" class="step flex items-center space-x-2 cursor-pointer">
-        <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
-          Goal
-        </span>
-        <span class="text-gray-400">&gt;</span>
-      </div>
-    </li>
-
-    <li>
-      <div id="step-3" class="step flex items-center space-x-2 cursor-pointer">
-        <span class="step-label text-sm uppercase pb-1">
-          Domain
-        </span>
-        <span class="text-gray-400">&gt;</span>
-      </div>
-    </li>
-
-    <li>
-      <div id="step-4" class="step flex items-center space-x-2 cursor-pointer">
-        <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
-          Forms
-        </span>
-        <span class="text-gray-400">&gt;</span>
-      </div>
-    </li>
-
-    <li>
-      <div id="step-5" class="step flex items-center space-x-2 cursor-pointer">
-        <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
-          Supports
-        </span>
-        <span class="text-gray-400">&gt;</span>
-      </div>
-    </li>
-    <li>
-      <div id="step-6" class="step flex items-center space-x-2 cursor-pointer">
-        <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
-          Finished LO
-        </span>
-      </div>
-    </li>
-  </ul>
+  <!-- Next Button -->
+  <button id="next-button" onclick="goForward()">Next »</button>
 </nav>
+
 
 
 <div id="sidebar-section" class="hidden flex mt-20">
@@ -212,30 +199,18 @@
 
 </main>
 
- <button
-  id="next-button"
-  class="fixed bottom-4 right-8 px-6 py-2 bg-orange-400 hover:bg-orange-500 text-white font-semibold rounded-md shadow-md transition-colors duration-300"
-  onclick="goForward()">
-  Next &raquo;
-</button>
-
-  <button
-  id="back-button"
-  class="fixed bottom-4 left-8 px-6 py-2 bg-orange-400 hover:bg-orange-500 text-white font-semibold rounded-md shadow-md transition-colors duration-300"
-  onclick="goBackward()">
-  &laquo; Back
-</button>
 
 
-<button
-  id="restart-button"
-  class="fixed bottom-8 right-1/2 translate-x-1/2 px-6 py-2 bg-white text-green-800
-         font-semibold rounded-md shadow-lg hover:bg-gray-200 border border-green-700
-         transition-all duration-300 hidden"
-  onclick="restartApp()">
-  🔁 Restart
-</button>
+<!-- ==== Bottom Action Buttons ==== -->
+<div id="bottom-actions">
+  <button id="restart-button" onclick="restartApp()">🔁 Restart</button>
 
+  <a id="wida-btn" href="#" class="btn-wida hidden">
+    📚 See WIDA Resources Related to Your Lesson
+  </a>
+
+  <button id="copy-button">📋 Copy Objective</button>
+</div>
 
 
 </body>

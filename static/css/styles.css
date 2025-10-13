@@ -3,24 +3,18 @@
 @tailwind utilities;
 
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   background-color: #d3d3d3;
 }
 
-/* ----- Header ----- */
 header {
   flex: 0 0 72px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  position: relative;
-  z-index: 10;
-  padding: 0 1rem;
-  background-color: oklch(87.2% 0.01 258.338);
 }
 
-/* ----- Main Layout ----- */
 main {
   flex: 1 1 auto;
-  overflow-y: auto;
-  min-height: 80vh;
 }
 
 /* ----- Suggestion Dropdowns ----- */
@@ -98,10 +92,11 @@ main {
   height: 100vh;
   background-color: #065f46;
   display: flex;
-  align-items: center;
+  align-items: flex-start;  /* 👈 instead of center */
   justify-content: center;
   z-index: 50;
   transition: all 0.8s ease-in-out;
+  padding-top: 20vh; /* 👌 optional gentle vertical centering */
 }
 
 .fullscreen-preview span {
@@ -109,10 +104,6 @@ main {
   text-decoration: none !important;
 }
 
-#objective-preview span::after {
-  content: "\00A0";
-  display: inline;
-}
 
 .fullscreen-preview.fade-in {
   opacity: 0;
@@ -127,76 +118,43 @@ main {
   }
 }
 
-/* ----- Copy & AI helper buttons (fade in/out) ----- */
-#copy-button,
+
+/* ============================
+   🧠 Agentic AI Helper — top right FIXED
+============================ */
 #agentic-ai-helper {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(10px);
-  transition: all 0.4s ease;
-}
-
-#copy-button.show,
-#agentic-ai-helper.show {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
-  z-index: 9999;
-}
-
-/* ----- Sidebar Section ----- */
-#sidebar-section {
-  position: relative;
-  width: 100%;
-  margin-top: 2rem;
-}
-
-/* ----- Navigation Buttons (Next/Back) ----- */
-#next-button,
-#back-button {
   position: fixed;
-  bottom: 8rem;
-  z-index: 40;
-  transition: bottom 0.4s ease;
-}
-
-.in-nav {
-  position: fixed !important;
-  bottom: 3rem !important;
-}
-
-#back-button.in-nav {
-  left: 0;
-}
-
-#next-button.in-nav {
-  right: 0;
-}
-
-/* ===================================================
-   🧠 Agentic AI Helper Styling
-   =================================================== */
-
-#agentic-ai-helper {
-  position: fixed !important;
-  bottom: 1.5rem !important;  /* bottom-left corner */
-  left: 1.5rem !important;
+  top: 1.5rem;
+  right: 1.5rem;
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  background-color: oklch(98.5% 0 0); /* same as panel */
+  background-color: white;
   border: 1px solid #dcdcdc;
   border-radius: 0.75rem;
   padding: 1rem 1rem 0.75rem 1rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 9999;
+
+  /* hidden by default */
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(20px, -10px);
+  transition: all 0.4s ease;
 }
 
-/* ✕ Close Button — Top Right Inside Bubble */
-#agentic-ai-helper > #ai-close-btn {
-  position: absolute !important;
-  top: 0.35rem !important;
-  right: 0.5rem !important;
+/* when shown */
+#agentic-ai-helper.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(0, 0);
+}
+
+/* close button */
+#ai-close-btn {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.5rem;
   color: #6b7280;
   font-size: 1.1rem;
   font-weight: bold;
@@ -207,16 +165,11 @@ main {
   z-index: 10000;
 }
 
-#agentic-ai-helper > #ai-close-btn:hover {
+#ai-close-btn:hover {
   color: #ef4444;
 }
 
-#agentic-ai-helper.hide {
-  opacity: 0;
-  transform: translateY(10px);
-  pointer-events: none;
-  transition: all 0.4s ease;
-}
+
 
 
 #objective-preview.fullscreen-preview {
@@ -228,23 +181,65 @@ main {
 }
 
 
-#restart-button {
-  position: fixed !important;
-  bottom: 2rem !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  background-color: #ffffff !important;
-  color: #065f46 !important;
-  font-weight: 600 !important;
-  padding: 0.75rem 1.5rem !important;
-  border: 2px solid #065f46 !important;
-  border-radius: 0.75rem !important;
-  z-index: 100000 !important;  /* 🚀 sits above everything */
-  pointer-events: auto !important;
-  display: none;
+/* ===== Bottom Action Bar ===== */
+#bottom-actions {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none; /* 👈 hide entire bar initially */
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  z-index: 100005;
 }
 
-#restart-button.show,
-#restart-button:not(.hidden) {
-  display: block !important;
+#bottom-actions.show {
+  display: flex; /* 👈 shown when ready */
+}
+
+/* Buttons inside the bar share consistent style */
+#bottom-actions button,
+#bottom-actions a {
+  display: inline-block;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 2px solid transparent;
+  transition: background 0.2s, transform 0.2s;
+}
+
+/* Individual button styles */
+#restart-button {
+  background-color: #ffffff;
+  color: #065f46;
+  border-color: #065f46;
+}
+
+#restart-button:hover {
+  transform: translateY(-2px);
+}
+
+.btn-wida {
+  background-color: #2563eb;
+  color: white;
+}
+
+.btn-wida:hover {
+  background-color: #1d4ed8;
+}
+
+#copy-button {
+  background-color: transparent;
+  color: white;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+#copy-button:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+#agentic-ai-helper {
+  z-index: 100001 !important;
 }
