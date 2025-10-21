@@ -14,28 +14,28 @@ app = Flask(__name__)
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @app.route("/wida_resources")
-def wida_resources():
-    topic = request.args.get("topic", "").strip()
+def wida_resources(): #this is the route that defines what we do with the topic and sends it to the html
+    topic = request.args.get("topic", "").strip()  #this gets the 'topic' query parameter from the URL (e.g. /wida_resources?topic=writing).
     if not topic:
         return render_template("wida_resources.html", articles=[], topic="")
 
     articles = fetch_wida_articles(topic)
     print("Fetched articles:", articles)
 
-    summaries = [summarize_text(a["title"]) for a in articles]
-    combined = zip(articles, summaries)
+    summaries = [summarize_text(a["title"]) for a in articles] #this uses calls  summarize (below) not working.
+    combined = zip(articles, summaries) #this makes a tuple from article and summary--not really working
     return render_template("wida_resources.html", articles=combined, topic=topic)
 
 
 
-def fetch_wida_articles(topic):
+def fetch_wida_articles(topic): #this is what is used above
     """Return curated Google search links for WIDA-related academic content."""
-    base = "https://www.google.com/search?q="
-    encoded_topic = requests.utils.quote(topic)
+    base = "https://www.google.com/search?q=" #basic search in google since scraping didn't work
+    encoded_topic = requests.utils.quote(topic)  #utils (from AI) is just making the topic safe to use I think
 
     articles = [
         {
-            "title": f"WIDA research and guidance on {topic}",
+            "title": f"WIDA research and guidance on {topic}", #this is just going through the articles and  making them look nice
             "url": f"{base}site:wida.wisc.edu+{encoded_topic}",
         },
         {
@@ -45,19 +45,19 @@ def fetch_wida_articles(topic):
         {
             "title": f"WIDA educator resources and classroom strategies for {topic}",
             "url": f"{base}site:wida.wisc.edu+{encoded_topic}+resources",
-        },
+        }, #encoded topic is just the url safe version of the topic
     ]
 
     print(f"Articles found (generated links): {len(articles)}")
-    return articles
+    return articles #returns how many articles we got back
 
-def summarize_text(text):
+def summarize_text(text): #this is the broken summarizer
     """Use Ollama locally, fallback to OpenAI in production or if Ollama fails."""
     # Try Ollama first
     try:
-        print("🧠 Trying Ollama locally...")
+        print("Trying Ollama locally...") #ollama didn't work too well
         res = requests.post(
-            "http://localhost:11434/api/chat",
+            "http://localhost:11434/api/chat", #no api
             json={
                 "model": "llama3",
                 "messages": [
@@ -69,21 +69,21 @@ def summarize_text(text):
                         ),
                     },
                     {"role": "user", "content": f"Summarize this WIDA resource:\n\n{text}"},
-                ],
+                ], #this is very similar to open AI
             },
-            timeout=6,
+            timeout=6, #this is a timeoout if it can't find anything which it usually can't
         )
         res.raise_for_status()
         data = res.json()
         if "message" in data and "content" in data["message"]:
             return data["message"]["content"]
-        print("⚠️ Ollama returned unexpected response — falling back.")
+        print("⚠Ollama returned unexpected response — falling back.")
     except Exception as e:
-        print("❌ Ollama unavailable or failed:", e)
+        print("Ollama unavailable or failed:", e) #handles ollama failure
 
     # Fallback to OpenAI
     try:
-        print("🌐 Falling back to OpenAI (production or backup)...")
+        print("🌐 Falling back to OpenAI (production or backup)...") #AI jumps in
         completion = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
@@ -96,12 +96,12 @@ def summarize_text(text):
                 },
                 {"role": "user", "content": text},
             ],
-            temperature=0.5,
+            temperature=0.5, #this has to do with how create the AI is.
         )
         return completion.choices[0].message.content.strip()
     except Exception as e:
         print("⚠️ OpenAI fallback also failed:", e)
-        return "(Summary unavailable)"
+        return "(Summary unavailable)" #usually doesn't fail
 
 
 
@@ -109,7 +109,7 @@ def summarize_text(text):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html") #basic routes
 
 @app.route("/about")
 def about():
@@ -121,16 +121,16 @@ def contact():
 
 @app.route("/suggest_content")
 def suggest_content():
-    user_input = request.args.get("input", "")
-    field_type = request.args.get("field", "general")
+    user_input = request.args.get("input", "") #Use Flask’s request object to read query parameters from the URL.
+    field_type = request.args.get("field", "general") #field is what I want queried , general is fall back
 
     if not user_input:
-        return jsonify([])
+        return jsonify([]) #make it json
 
     prompt = f"""
     A teacher is writing a WIDA-aligned language objective.
     The teacher typed: "{user_input}"
-    The field input is: "{field_type}"
+    The field input is: "{field_type}"     
 
     Suggest 5 short completion fragments (1–3 words) that fit this field:
     -Suggest **no more than 5** short completion fragments (1–3 words).
@@ -143,16 +143,21 @@ def suggest_content():
     Return ONLY a valid JSON array of strings, without markdown, code fences, or extra text.
     """
 
+    # Build an AI prompt to generate 5 short completion suggestions (1–3 words)
+    # for a teacher writing a WIDA-aligned language objective. The suggestions
+    # vary depending on which field type the user selected (e.g., who, goal,
+    # forms, supports, or function). Returns a plain JSON array of strings.
+
     response= client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}],
-        temperature=0.5
+        temperature=0.5 #how creative the AI is
     )
 
     content = response.choices[0].message.content.strip()
 
 
-    try:
+    try:  #safety
         import json
         suggestions = json.loads(content)
     except Exception:
@@ -160,15 +165,20 @@ def suggest_content():
 
     return jsonify(suggestions)
 
+# Try to safely parse the AI response as JSON.
+# If parsing fails (e.g., invalid JSON), fall back to returning the raw content as a single-item list.
+# Finally, return the result to the frontend as JSON.
+
 
 
 @app.route('/agentic_detect', methods=['POST'])
 def agentic_detect():
-    data = request.get_json()
-    objective = data.get('objective', '')
+    data = request.get_json()  #get the json data
+    objective = data.get('objective', '') #get the finished objective at the end
 
     if not objective:
-        return jsonify({"error": "No objective provided"}), 400
+        return jsonify({"error": "No objective provided"}), 400  #safety
+    # Send the objective to the GPT model to identify its main topic or theme.
 
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -185,14 +195,15 @@ def agentic_detect():
         ]
     )
 
-    topic = completion.choices[0].message.content.strip()
-    return jsonify({"topic": topic})
+    topic = completion.choices[0].message.content.strip() #strip content here to get topic from AI
+    return jsonify({"topic": topic})        # Return the detected topic to the frontend as JSON.
+
 
 
 @app.route("/agentic_intro", methods=["GET"])
 def agentic_intro():
     """
-    Suggests current trending classroom topics or themes teachers are teaching this month.
+    Suggests current trending classroom topics or themes teachers are teaching this month. This will start the lesson
     """
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -208,13 +219,13 @@ def agentic_intro():
             },
             {"role": "user", "content": "What are teachers teaching this month?"},
         ],
-        temperature=0.7,
+        temperature=0.7, #AI suggestions and this time ask AI to be fairly creative
     )
 
     import json
     text = completion.choices[0].message.content.strip()
 
-    # 🧠 Cleanly parse GPT output even if it includes code fences
+    # Cleanly parse GPT output even if it includes code fences--triple back ticks --want a clean delivery from ChatGpt
     if text.startswith("```"):
         text = text.strip("`").replace("json", "").strip()
 
@@ -224,15 +235,20 @@ def agentic_intro():
         # fallback: handle bullet points or comma-separated text
         topics = [t.strip("•- \n") for t in text.split("\n") if t.strip()]
 
-    # ✅ Always return as proper JSON
+    # Always return as proper JSON
     return jsonify({"topics": topics})
 
 
 
 @app.route("/find_articles", methods=["POST"])
 def find_articles():
-    data = request.get_json()
-    topic = data.get("topic", "").strip()
+    # This route receives a topic (like "photosynthesis") from the frontend,
+    # rephrases it with GPT to make a better Google search,
+    # and returns a few helpful teaching-related search links.
+    data = request.get_json() # Get the JSON body of the POST request.
+    topic = data.get("topic", "").strip()  # Pull the "topic" field safely from that data.
+
+    # If no topic was provided, return an error message and a 400 (Bad Request) status code.
 
     if not topic:
         return jsonify({"error": "No topic provided"}), 400
@@ -251,11 +267,17 @@ def find_articles():
     )
     query = completion.choices[0].message.content.strip()
 
-    #Build smart Google search URLs
+    # Build a Google search URL that looks for educational sites (.edu, Edutopia, etc.).
+    # f"...{variable}..." means Python will insert the value of that variable into the string.
     base_query = f"{query} lesson plan OR classroom activity OR teaching ideas site:.edu OR site:edutopia.org OR site:readwritethink.org OR site:weareteachers.com"
     search_url = f"https://www.google.com/search?q={requests.utils.quote(base_query)}"
 
+    # "quote" safely encodes spaces and special characters for a valid URL.
+    # Example: "lesson plan ideas" → "lesson%20plan%20ideas"
+
+
     #Return 3 "curated" results (they’re Google searches for different angles)
+    # Each item has a title and a Google search URL for that topic.
     articles = [
         {"title": f"Lesson plans for '{topic}'", "url": search_url},
         {"title": f"Classroom activities for '{topic}'", "url": f"https://www.google.com/search?q={requests.utils.quote(topic + ' classroom activity site:edutopia.org')}"},
@@ -266,7 +288,7 @@ def find_articles():
 
 
 
-
+#start
 
 if __name__ == "__main__":
     import os
