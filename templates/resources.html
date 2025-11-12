@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Teaching Resource Finder</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-50 font-sans text-gray-800 min-h-screen">
+
+  <!-- Header -->
+  <header class="text-center mt-10">
+    <h1 class="text-3xl font-bold text-indigo-700">Teaching Resource Finder</h1>
+    <p class="mt-2 text-gray-600">
+      Search for lesson plans, classroom activities, and teaching strategies from top education sites.
+    </p>
+  </header>
+
+  <!-- Search Form -->
+  <form action="{{ url_for('resources') }}" method="get"
+        class="flex justify-center mt-8 px-4">
+    <input
+      type="text"
+      name="topic"
+      placeholder="Enter a topic (e.g., photosynthesis, figurative language, classroom routines)"
+      class="border border-gray-300 rounded-lg p-2 w-2/3 focus:ring focus:ring-indigo-200"
+      value="{{ topic }}"
+      required
+    >
+    <button type="submit"
+      class="ml-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-lg transition">
+      Search
+    </button>
+  </form>
+
+  <!-- Results Section -->
+  <main class="max-w-3xl mx-auto mt-10 mb-16 space-y-6 px-4">
+    {% if articles %}
+      {% for article, summary in articles %}
+        <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition">
+          <h2 class="text-lg sm:text-xl font-semibold text-indigo-700">
+            <a href="{{ article.url }}" target="_blank" rel="noopener noreferrer"
+               class="hover:underline flex items-center gap-2">
+              📘 {{ article.title }}
+            </a>
+          </h2>
+          <p class="mt-3 text-gray-700 text-sm sm:text-base leading-relaxed">
+            {{ summary }}
+          </p>
+          <div class="mt-3">
+            <a href="{{ article.url }}" target="_blank" rel="noopener noreferrer"
+               class="inline-block bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-medium px-3 py-1 rounded-lg">
+              🔗 View on Google
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-center text-gray-500 mt-8 italic">
+        Waiting for your search or for search results to appear here. 💥
+      </p>
+    {% endif %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center text-xs text-gray-400 py-4">
+    Powered by <strong>OpenAI</strong> summaries and direct <strong>Google Search</strong> links from trusted education sites.
+  </footer>
+
+</body>
+</html>

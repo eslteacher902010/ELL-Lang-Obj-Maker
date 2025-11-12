@@ -14,58 +14,74 @@ app = Flask(__name__)
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-@app.route("/wida_resources")
-def wida_resources():
+@app.route("/resources")
+def resources():
     topic = request.args.get("topic", "").strip()
     if not topic:
-        return render_template("wida_resources.html", articles=[], topic="")
+        return render_template("resources.html", articles=[], topic="")
 
-    articles = fetch_wida_articles(topic)
-    print("Fetched articles:", articles)
+    articles = fetch_general_resources(topic)
+    print("Fetched general teaching resources:", articles)
 
     summaries = [summarize_text(a["title"]) for a in articles]
     combined = zip(articles, summaries)
-    return render_template("wida_resources.html", articles=combined, topic=topic)
+    return render_template("resources.html", articles=combined, topic=topic)
 
 
-def fetch_wida_articles(topic):
-    """Generate direct Google search links for WIDA resources."""
+def fetch_general_resources(topic):
+    """Generate direct Google search links for general K–12 teaching resources."""
     base = "https://www.google.com/search?q="
     encoded = requests.utils.quote(topic)
 
-    # Just a few useful angles
     articles = [
         {
-            "title": f"WIDA resources about {topic}",
-            "url": f"{base}wida+{encoded}+site:wida.wisc.edu"
+            "title": f"Lesson plans for {topic}",
+            "url": f"{base}{encoded}+lesson+plans+site:.edu+OR+site:edutopia.org+OR+site:readwritethink.org"
         },
         {
-            "title": f"WIDA lesson plans related to {topic}",
-            "url": f"{base}wida+{encoded}+lesson+plans+site:wida.wisc.edu"
+            "title": f"Teaching strategies for {topic}",
+            "url": f"{base}{encoded}+teaching+strategies+site:.edu+OR+site:weareteachers.com+OR+site:edutopia.org"
         },
         {
-            "title": f"WIDA classroom strategies for {topic}",
-            "url": f"{base}wida+{encoded}+teaching+strategies+site:wida.wisc.edu"
+            "title": f"Classroom activities and resources for {topic}",
+            "url": f"{base}{encoded}+classroom+activities+site:.edu+OR+site:sharemylesson.com+OR+site:readwritethink.org"
         },
     ]
 
-    print(f"Generated {len(articles)} simple Google links for topic: {topic}")
+    print(f"Generated {len(articles)} resource links for topic: {topic}")
     return articles
 
 def summarize_text(text):
-    """Summarize the purpose of the given WIDA search link title."""
-    completion = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "You help ESL educators find WIDA resources."},
-            {"role": "user", "content": f"What might educators find under '{text}'? Write 1–2 sentences."}
-        ],
-        temperature=0.5
-    )
-    return completion.choices[0].message.content.strip()
+    """Summarize the content focus of an education resource in plain, student-facing language."""
+    try:
+        completion = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You summarize educational resources briefly and neutrally. "
+                        "Do not speak to educators or mention teachers. "
+                        "Just describe what the resource covers or helps students learn."
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": f"Summarize '{text}' in one or two short sentences, focusing on what learners do or explore."
+                }
+            ],
+            temperature=0.6,
+        )
 
+        return completion.choices[0].message.content.strip() or "(No summary available.)"
 
+    except Exception as e:
+        print("⚠️ Summarizer error:", e)
+        return "(Summary unavailable — showing link only.)"
 
+@app.route("/wida_resources")
+def wida_resources():
+    return render_template("wida_resources.html")
 
 
 @app.route("/")
