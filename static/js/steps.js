@@ -69,6 +69,8 @@ function nextStep(index) {
     updateSidebar(["domain", "forms", "supports"][index - 3]);
   } else if (index === 6) {
     // Step 6: FINISHED LO -- Hide the full panel and navigation buttons (we're done!)
+    adjustBotPosition(currentStep === 6);
+    document.body.classList.add("fullscreen-active");
     document.getElementById("full-panel").classList.add("hidden");
     document.getElementById("next-button").classList.add("hidden");
     document.getElementById("back-button").classList.add("hidden");
@@ -92,6 +94,8 @@ if (widaBtn) {
 
     const preview = document.getElementById("objective-preview");
     const rawObjective = preview ? preview.innerText.trim() : "";
+
+    adjustObjectiveFont();
 
     // Clean up the text:
     // - remove "will be able to"
@@ -350,3 +354,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+//function to shrink font/prevent it from being too big
+function adjustObjectiveFont() {
+  const el = document.getElementById('objective-preview');
+  if (!el) return;
+
+  const len = el.textContent.length;
+
+  if (len > 300) {
+    el.style.fontSize = '1rem';
+  } else if (len > 200) {
+    el.style.fontSize = '1.25rem';
+  } else if (len > 100) {
+    el.style.fontSize = '1.5rem';
+  } else {
+    el.style.fontSize = '1.75rem';
+  }
+}
+

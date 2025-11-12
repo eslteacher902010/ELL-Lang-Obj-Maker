@@ -6,6 +6,7 @@ from openai import OpenAI
 import requests
 
 
+
 load_dotenv()
 print("Key loaded?", os.getenv("OPENAI_API_KEY"))
 
@@ -14,94 +15,54 @@ app = Flask(__name__)
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @app.route("/wida_resources")
-def wida_resources(): #this is the route that defines what we do with the topic and sends it to the html
-    topic = request.args.get("topic", "").strip()  #this gets the 'topic' query parameter from the URL (e.g. /wida_resources?topic=writing).
+def wida_resources():
+    topic = request.args.get("topic", "").strip()
     if not topic:
         return render_template("wida_resources.html", articles=[], topic="")
 
     articles = fetch_wida_articles(topic)
     print("Fetched articles:", articles)
 
-    summaries = [summarize_text(a["title"]) for a in articles] #this uses calls  summarize (below) not working.
-    combined = zip(articles, summaries) #this makes a tuple from article and summary--not really working
+    summaries = [summarize_text(a["title"]) for a in articles]
+    combined = zip(articles, summaries)
     return render_template("wida_resources.html", articles=combined, topic=topic)
 
 
+def fetch_wida_articles(topic):
+    """Generate direct Google search links for WIDA resources."""
+    base = "https://www.google.com/search?q="
+    encoded = requests.utils.quote(topic)
 
-def fetch_wida_articles(topic): #this is what is used above
-    """Return curated Google search links for WIDA-related academic content."""
-    base = "https://www.google.com/search?q=" #basic search in google since scraping didn't work
-    encoded_topic = requests.utils.quote(topic)  #utils (from AI) is just making the topic safe to use I think
-
+    # Just a few useful angles
     articles = [
         {
-            "title": f"WIDA research and guidance on {topic}", #this is just going through the articles and  making them look nice
-            "url": f"{base}site:wida.wisc.edu+{encoded_topic}",
+            "title": f"WIDA resources about {topic}",
+            "url": f"{base}wida+{encoded}+site:wida.wisc.edu"
         },
         {
-            "title": f"WIDA lesson frameworks and instructional plans for {topic}",
-            "url": f"{base}site:wida.wisc.edu+{encoded_topic}+lesson+plan",
+            "title": f"WIDA lesson plans related to {topic}",
+            "url": f"{base}wida+{encoded}+lesson+plans+site:wida.wisc.edu"
         },
         {
-            "title": f"WIDA educator resources and classroom strategies for {topic}",
-            "url": f"{base}site:wida.wisc.edu+{encoded_topic}+resources",
-        }, #encoded topic is just the url safe version of the topic
+            "title": f"WIDA classroom strategies for {topic}",
+            "url": f"{base}wida+{encoded}+teaching+strategies+site:wida.wisc.edu"
+        },
     ]
 
-    print(f"Articles found (generated links): {len(articles)}")
-    return articles #returns how many articles we got back
+    print(f"Generated {len(articles)} simple Google links for topic: {topic}")
+    return articles
 
-def summarize_text(text): #this is the broken summarizer
-    """Use Ollama locally, fallback to OpenAI in production or if Ollama fails."""
-    # Try Ollama first
-    try:
-        print("Trying Ollama locally...") #ollama didn't work too well
-        res = requests.post(
-            "http://localhost:11434/api/chat", #no api
-            json={
-                "model": "llama3",
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": (
-                            "You are a teaching assistant summarizing WIDA materials "
-                            "for ESL educators in one short paragraph."
-                        ),
-                    },
-                    {"role": "user", "content": f"Summarize this WIDA resource:\n\n{text}"},
-                ], #this is very similar to open AI
-            },
-            timeout=6, #this is a timeoout if it can't find anything which it usually can't
-        )
-        res.raise_for_status()
-        data = res.json()
-        if "message" in data and "content" in data["message"]:
-            return data["message"]["content"]
-        print("⚠Ollama returned unexpected response — falling back.")
-    except Exception as e:
-        print("Ollama unavailable or failed:", e) #handles ollama failure
-
-    # Fallback to OpenAI
-    try:
-        print("🌐 Falling back to OpenAI (production or backup)...") #AI jumps in
-        completion = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {
-                    "role": "system",
-                    "content": (
-                        "You are a teaching assistant summarizing WIDA resources for ESL educators. "
-                        "Write one short paragraph summary."
-                    ),
-                },
-                {"role": "user", "content": text},
-            ],
-            temperature=0.5, #this has to do with how create the AI is.
-        )
-        return completion.choices[0].message.content.strip()
-    except Exception as e:
-        print("⚠️ OpenAI fallback also failed:", e)
-        return "(Summary unavailable)" #usually doesn't fail
+def summarize_text(text):
+    """Summarize the purpose of the given WIDA search link title."""
+    completion = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "You help ESL educators find WIDA resources."},
+            {"role": "user", "content": f"What might educators find under '{text}'? Write 1–2 sentences."}
+        ],
+        temperature=0.5
+    )
+    return completion.choices[0].message.content.strip()
 
 
 

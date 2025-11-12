@@ -15,6 +15,30 @@
   <title>WIDA Objective Builder</title>
 </head>
 
+
+ <!-- Agentic AI Floating Helper -->
+<div id="agentic-ai-helper">
+  <!-- ✕ Close Button (TOP-RIGHT corner inside the white box) -->
+  <button id="ai-close-btn"
+    class="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-lg font-bold leading-none">
+    ✕
+  </button>
+
+  <!-- 🤖 Icon -->
+  <div class="text-2xl">🤖</div>
+
+  <!-- Content -->
+  <div>
+    <p class="text-gray-800 text-sm font-medium mb-2">
+      Hey! Want to find articles about your lesson topic?
+    </p>
+    <button id="agentic-ai-button"
+      class="text-sm bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors">
+      Find Articles
+    </button>
+  </div>
+</div>
+
 <body>
   <header class="bg-header text-gray-900 py-4 px-6 shadow-md">
     <div class="text-xl font-bold text-gray-900">WIDA Objective Builder</div>
@@ -54,30 +78,7 @@
 </div>
 
 
-  <!-- Agentic AI Floating Helper -->
-<div id="agentic-ai-helper">
-  <!-- ✕ Close Button (TOP-RIGHT corner inside the white box) -->
-  <button id="ai-close-btn"
-    class="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-lg font-bold leading-none">
-    ✕
-  </button>
 
-  <!-- 🤖 Icon -->
-  <div class="text-2xl">🤖</div>
-
-  <!-- Content -->
-  <div>
-    <p class="text-gray-800 text-sm font-medium mb-2">
-      Hey! Want to find articles about your lesson topic?
-    </p>
-    <button id="agentic-ai-button"
-      class="text-sm bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors">
-      Find Articles
-    </button>
-  </div>
-</div>
-
-<!-- Step Navigation -->
 <!-- Step Navigation -->
 <nav id="step-nav" class="relative flex items-center justify-between mt-8 mb-4 px-8">
   <!-- Back Button -->
@@ -208,16 +209,6 @@
        alt="restart" width="30" height="30" style="vertical-align:middle;">
   Restart
 </button>
-
-
-  <a id="wida-btn" href="#" class="btn-wida hidden flex items-center gap-2">
-  <img src="{{ url_for('static', filename='icons/1F4DA.svg') }}"
-       alt="WIDA resources" width="30" height="30" class="inline-block align-middle">
-  <span class="sr-only">📚</span>
-  See WIDA Resources Related to Your Lesson
-</a>
-
-
 
   <button id="copy-button" class="flex items-center gap-2">
   <img src="{{ url_for('static', filename='icons/1F4CB.svg') }}"

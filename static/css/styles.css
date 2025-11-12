@@ -84,19 +84,25 @@ main {
 }
 
 /* ----- Fullscreen Preview ----- */
+/* ----- Fullscreen Preview ----- */
 .fullscreen-preview {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0; /* shorthand for top:0; left:0; right:0; bottom:0 */
   width: 100vw;
   height: 100vh;
   background-color: #065f46;
+
   display: flex;
-  align-items: flex-start;  /* 👈 instead of center */
   justify-content: center;
-  z-index: 50;
-  transition: all 0.8s ease-in-out;
-  padding-top: 20vh; /* 👌 optional gentle vertical centering */
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+
+  z-index: 9999;           /* ⬆️ ensure it covers everything */
+  transition: all 0.6s ease-in-out;
+
+  padding: 0 2rem;         /* for breathing room on sides */
+  overflow: hidden;        /* hides any stray panels behind */
 }
 
 .fullscreen-preview span {
@@ -124,8 +130,8 @@ main {
 ============================ */
 #agentic-ai-helper {
   position: fixed;
-  top: 1.5rem;
-  right: 1.5rem;
+  bottom: 20px;
+  right: 20px;
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
@@ -165,15 +171,31 @@ main {
   z-index: 10000;
 }
 
+#agentic-ai-helper.high {
+  bottom: 140px;
+}
+
 #ai-close-btn:hover {
   color: #ef4444;
 }
 
+#objective-preview {
+  display: inline-block;           /* keeps multi-line text together */
+  word-break: keep-all;            /* no mid-word breaks */
+  overflow-wrap: break-word;       /* wrap normally at spaces */
+  white-space: normal;             /* allow wrapping */
+  line-height: 1.5;
+  text-align: center;
+  color: white;
+  max-width: 80%;                  /* prevent overly wide text */
+  margin: 0 auto;
+}
 
 
 
 #objective-preview.fullscreen-preview {
   font-size: 1.5rem !important;
+  margin-top: 10vh;
 }
 
 #objective-preview.fullscreen-preview span {
@@ -243,3 +265,9 @@ main {
 #agentic-ai-helper {
   z-index: 100001 !important;
 }
+
+body.fullscreen-active {
+  overflow: hidden;
+  background-color: #065f46; /* match fullscreen color */
+}
+
