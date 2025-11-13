@@ -1,9 +1,12 @@
 import os
 
 from dotenv import load_dotenv
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template,url_for
 from openai import OpenAI
 import requests
+from datetime import date, datetime
+from flask import Response
+# from flask import Flask, render_template, flash, request, redirect, url_for, session, jsonify
 
 
 
@@ -262,6 +265,60 @@ def find_articles():
     ]
 
     return jsonify({"articles": articles})
+
+@app.route("/robots.txt")
+def robots():
+    return Response(
+        "User-agent: *\nAllow: /\nSitemap: https://ellobjectivebuilder.com/sitemap.xml",
+        mimetype="text/plain"
+    )
+
+INDEXABLE_ENDPOINTS = {
+    "index",
+    "about",
+    "resources",
+    "wida_resources",
+    "contact",
+}
+
+
+# --- sitemap.xml ---
+@app.route("/sitemap.xml")
+def sitemap():
+    today = date.today().isoformat()
+
+    urls = []
+    for rule in app.url_map.iter_rules():
+        if (
+            rule.endpoint in INDEXABLE_ENDPOINTS
+            and "GET" in rule.methods
+            and len(rule.arguments) == 0
+        ):
+            # Build absolute, non-www, https URLs regardless of incoming host
+            path = url_for(rule.endpoint)
+            urls.append(f"https://ellobjectivebuilder.com{path}")
+
+    xml_urls = "\n".join(
+        f"""  <url>
+    <loc>{u}</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>{'1.0' if u.rstrip('/').count('/') <= 2 else '0.8'}</priority>
+  </url>"""
+        for u in sorted(urls)
+    )
+
+    xml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{xml_urls}
+</urlset>"""
+
+    resp = Response(xml, mimetype="application/xml")
+    resp.cache_control.public = True
+    resp.cache_control.max_age = 86400  # 24h
+    resp.last_modified = datetime.utcnow()
+    return resp
+
 
 
 
