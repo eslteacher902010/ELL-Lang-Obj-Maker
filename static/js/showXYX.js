@@ -26,6 +26,7 @@ function showWhoInput(targetId = "dynamic-panel")  {
           style="cursor: help; font-size: 1.2em;"
         >&#9432;</span>
       </div>
+      <p class="text-sm text-gray-500 mt-1">Tap Next when you're ready</p>
 
       <div class="suggestions-container relative">
         <ul id="who-suggestions" class="suggestions-list absolute z-50 bg-white border border-gray-300 shadow-lg w-full"></ul>
@@ -102,6 +103,9 @@ function showGoalInput(targetId = "dynamic-panel") {
           oninput="updateField('goal', this.value); fetchSuggestions(this.value, 'goal-suggestions','goal')"
         />
         </div>
+
+      <p class="text-sm text-gray-500 mt-1">Tap Next when you're ready</p>
+
       <div class="suggestions-container relative">
         <ul id="goal-suggestions" class="suggestions-list absolute z-50 bg-white border border-gray-300 shadow-lg w-full"></ul>
       </div>
@@ -127,7 +131,7 @@ function showDomain(type) {
       domain = ["No details available."];
   }
 
-  // 🧱 1. Build structure if not already present
+  // 1. Build structure if not already present
   if (!panel.querySelector("#domain-grid")) {
     panel.innerHTML = `
       <div id="domain-grid" class="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-4 mb-6"></div>

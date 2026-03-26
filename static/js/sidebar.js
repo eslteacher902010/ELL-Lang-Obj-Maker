@@ -86,8 +86,11 @@ function updateField(fieldId, value) {
   if (span) span.textContent = value || `[${fieldId}]`;
 }
 
-// Assign a specific value to a field; ready for customization if needed later
+// Assign a specific value to a field
 function setValue(fieldId, value) {
   const span = document.getElementById(fieldId);
   if (span) span.textContent = value;
+
+  // Auto-advance after button/suggestion selections
+  goForward();
 }
