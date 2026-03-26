@@ -26,7 +26,7 @@ function showWhoInput(targetId = "dynamic-panel")  {
           style="cursor: help; font-size: 1.2em;"
         >&#9432;</span>
       </div>
-      <p class="text-sm text-gray-500 mt-1">Tap Next when you're ready</p>
+      <p class="text-base text-gray-600 mt-2 mb-1">Tap Next when you're ready</p>
 
       <div class="suggestions-container relative">
         <ul id="who-suggestions" class="suggestions-list absolute z-50 bg-white border border-gray-300 shadow-lg w-full"></ul>
@@ -104,7 +104,7 @@ function showGoalInput(targetId = "dynamic-panel") {
         />
         </div>
 
-      <p class="text-sm text-gray-500 mt-1">Tap Next when you're ready</p>
+      <p class="text-base text-gray-600 mt-2 mb-1">Tap Next when you're ready</p>
 
       <div class="suggestions-container relative">
         <ul id="goal-suggestions" class="suggestions-list absolute z-50 bg-white border border-gray-300 shadow-lg w-full"></ul>
