@@ -271,3 +271,54 @@ body.fullscreen-active {
   background-color: #065f46; /* match fullscreen color */
 }
 
+/* ===== Step Nav Real Fix ===== */
+@media (max-width: 1100px) {
+  #step-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 1rem;
+    overflow: hidden;
+  }
+
+  #back-button,
+  #next-button {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 0.95rem;
+    padding: 0.45rem 0.8rem;
+  }
+
+  #step-nav > div {
+    flex: 1 1 auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #step-nav > div::-webkit-scrollbar {
+    display: none;
+  }
+
+  #steps {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: max-content;
+    padding: 0.25rem 0;
+  }
+
+  #steps li {
+    flex-shrink: 0;
+  }
+
+  #steps .step {
+    white-space: nowrap;
+  }
+
+  #steps .step-label,
+  #steps span {
+    font-size: 0.9rem;
+  }
+}
