@@ -20,30 +20,42 @@
 
   <!-- SEO Meta Tags -->
   <meta name="title" content="Language Objective Creator">
-  <meta name="description" content="Easily build WIDA-aligned language objectives for your ESL or multilingual learners. Simple. Fast. Aligned.">
-  <meta name="keywords" content="WIDA, language objectives, ESL, multilingual learners, instructional design, lesson planning">
+  <meta name="description"
+        content="Create language objectives for multilingual learners and ESL classrooms.">
+  <meta name="keywords"
+        content="language objectives, ESL, multilingual learners, instructional design, lesson planning">
   <meta name="author" content="Paul Kniaz">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{ canonical_url }}">
   <meta property="og:title" content="Language Objective Creator">
-  <meta property="og:description" content="Easily build WIDA-aligned language objectives for ESL learners.">
-  <meta property="og:image" content="https://ellobjectivebuilder.com/static/images/preview.png">
+  <meta property="og:description"
+        content="Create language objectives for multilingual learners and ESL classrooms.">
+  <meta property="og:image"
+        content="https://ellobjectivebuilder.com/static/images/preview.png">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="{{ canonical_url }}">
   <meta name="twitter:title" content="Language Objective Creator">
-  <meta name="twitter:description" content="Quickly generate WIDA-aligned objectives for ESL classrooms.">
-  <meta name="twitter:image" content="https://ellobjectivebuilder.com/static/images/preview.png">
+  <meta name="twitter:description"
+        content="Create language objectives for multilingual learners and ESL classrooms.">
+  <meta name="twitter:image"
+        content="https://ellobjectivebuilder.com/static/images/preview.png">
 
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/books2.png') }}">
+  <link rel="icon" type="image/png"
+        href="{{ url_for('static', filename='images/books2.png') }}">
   <link rel="canonical" href="{{ canonical_url }}">
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation_css.css') }}">
+
+  <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/output.css') }}">
+  <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/navigation_css.css') }}">
+
   <script src="{{ url_for('static', filename='js/aiSuggestions.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/carousel.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/dynamic-panel.js') }}" defer></script>
@@ -51,13 +63,14 @@
   <script src="{{ url_for('static', filename='js/showXYX.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/sidebar.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/steps.js') }}" defer></script>
-  <title>WIDA Objective Builder</title>
+
+  <title>Language Objective Creator</title>
 </head>
 
-
- <!-- Agentic AI Floating Helper -->
+<!-- Agentic AI Floating Helper -->
 <div id="agentic-ai-helper">
-  <!-- ✕ Close Button (TOP-RIGHT corner inside the white box) -->
+
+  <!-- ✕ Close Button -->
   <button id="ai-close-btn"
     class="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-lg font-bold leading-none">
     ✕
@@ -71,6 +84,7 @@
     <p class="text-gray-800 text-sm font-medium mb-2">
       Hey! Want to find articles about your lesson topic?
     </p>
+
     <button id="agentic-ai-button"
       class="text-sm bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors">
       Find Articles
@@ -79,28 +93,46 @@
 </div>
 
 <body>
+
   <header class="bg-header text-gray-900 py-4 px-6 shadow-md">
-    <div class="text-xl font-bold text-gray-900">WIDA Objective Builder</div>
+
+    <div class="text-xl font-bold text-gray-900">
+      Language Objective Creator
+    </div>
+
+    <p class="text-xs text-gray-400 mt-2">
+      This site is independently developed for educators and is not affiliated with or endorsed by WIDA or WCEPS.
+    </p>
+
     <nav class="flex space-x-6">
-      <a href="{{ url_for('index') }}" class="text-gray-700 hover:text-blue-600">Home</a>
-      <a href="{{ url_for('about') }}" class="text-gray-700 hover:text-blue-600">About</a>
-      <a href="{{ url_for('contact') }}" class="text-gray-700 hover:text-blue-600">Contact</a>
-      <a href="{{ url_for('wida_resources') }}" class="text-gray-700 hover:text-blue-600">WIDA Tools</a>
-      <a href="{{ url_for('resources') }}" class="text-gray-700 hover:text-blue-600">Search for Resources</a>
+      <a href="{{ url_for('index') }}"
+         class="text-gray-700 hover:text-blue-600">Home</a>
+
+      <a href="{{ url_for('about') }}"
+         class="text-gray-700 hover:text-blue-600">About</a>
+
+      <a href="{{ url_for('contact') }}"
+         class="text-gray-700 hover:text-blue-600">Contact</a>
+
+      <a href="{{ url_for('wida_resources') }}"
+         class="text-gray-700 hover:text-blue-600">Teaching Resources</a>
+
+      <a href="{{ url_for('resources') }}"
+         class="text-gray-700 hover:text-blue-600">Search for Resources</a>
     </nav>
   </header>
-
 
 <main>
 
 <div class="bg-green-800 p-6 flex items-center justify-center">
   <section class="flex items-center justify-center w-full">
-    <!-- SAME PARENT -->
+
     <div class="relative z-10 flex flex-col justify-center w-full">
 
       <!-- preview -->
       <div id="objective-preview"
         class="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-white text-xl font-[Caveat] tracking-normal text-center">
+
         <span id="who">[who]</span>
         <span>will be able to</span>
         <span id="function">[function]</span>
@@ -112,62 +144,86 @@
         <span>with</span>
         <span id="supports" class="whitespace-nowrap">[supports]</span>
         <span>.</span>
+
       </div>
     </div>
   </section>
 </div>
 
-
-
 <!-- Step Navigation -->
-<nav id="step-nav" class="relative flex items-center justify-between mt-8 mb-4 px-8">
+<nav id="step-nav"
+     class="relative flex items-center justify-between mt-8 mb-4 px-8">
+
   <!-- Back Button -->
   <button id="back-button" onclick="goBackward()">« Back</button>
 
-  <!-- Steps (centered section) -->
+  <!-- Steps -->
   <div class="flex-grow flex justify-center">
     <ul id="steps" class="flex items-center space-x-6">
+
       <li>
-        <div id="step-0" class="step flex items-center space-x-2 cursor-pointer">
+        <div id="step-0"
+             class="step flex items-center space-x-2 cursor-pointer">
           <span class="step-label text-sm uppercase pb-1">Who?</span>
           <span class="text-gray-400">&gt;</span>
         </div>
       </li>
+
       <li>
-        <div id="step-1" class="step flex items-center space-x-2 cursor-pointer">
+        <div id="step-1"
+             class="step flex items-center space-x-2 cursor-pointer">
           <span class="step-label text-sm uppercase pb-1">What?</span>
           <span class="text-gray-400">&gt;</span>
         </div>
       </li>
+
       <li>
-        <div id="step-2" class="step flex items-center space-x-2 cursor-pointer">
-          <span class="text-sm uppercase text-gray-400 hover:text-gray-600">Goal</span>
+        <div id="step-2"
+             class="step flex items-center space-x-2 cursor-pointer">
+          <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
+            Goal
+          </span>
           <span class="text-gray-400">&gt;</span>
         </div>
       </li>
+
       <li>
-        <div id="step-3" class="step flex items-center space-x-2 cursor-pointer">
+        <div id="step-3"
+             class="step flex items-center space-x-2 cursor-pointer">
           <span class="step-label text-sm uppercase pb-1">Domain</span>
           <span class="text-gray-400">&gt;</span>
         </div>
       </li>
+
       <li>
-        <div id="step-4" class="step flex items-center space-x-2 cursor-pointer">
-          <span class="text-sm uppercase text-gray-400 hover:text-gray-600">Forms</span>
+        <div id="step-4"
+             class="step flex items-center space-x-2 cursor-pointer">
+          <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
+            Forms
+          </span>
           <span class="text-gray-400">&gt;</span>
         </div>
       </li>
+
       <li>
-        <div id="step-5" class="step flex items-center space-x-2 cursor-pointer">
-          <span class="text-sm uppercase text-gray-400 hover:text-gray-600">Supports</span>
+        <div id="step-5"
+             class="step flex items-center space-x-2 cursor-pointer">
+          <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
+            Supports
+          </span>
           <span class="text-gray-400">&gt;</span>
         </div>
       </li>
+
       <li>
-        <div id="step-6" class="step flex items-center space-x-2 cursor-pointer">
-          <span class="text-sm uppercase text-gray-400 hover:text-gray-600">Finished LO</span>
+        <div id="step-6"
+             class="step flex items-center space-x-2 cursor-pointer">
+          <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
+            Finished LO
+          </span>
         </div>
       </li>
+
     </ul>
   </div>
 
@@ -175,91 +231,29 @@
   <button id="next-button" onclick="goForward()">Next »</button>
 </nav>
 
-
-
 <div id="sidebar-section" class="hidden flex mt-20">
+
    <div class="w-64 bg-gray-50 border-r border-gray-200 text-gray-800">
-     <p id="sidebar-title" class="px-4 pt-4 text-sm font-semibold text-gray-700"></p>
-       <p class="px-4 pt-4 text-xs text-gray-500 italic">Based on WIDA Rubrics</p>
+
+     <p id="sidebar-title"
+        class="px-4 pt-4 text-sm font-semibold text-gray-700"></p>
+
+     <p class="px-4 pt-4 text-xs text-gray-500 italic">
+       Designed to support language objective planning for multilingual learners
+     </p>
+
     <div id="sidebar-content" class="p-4">
       <!-- dynamic content goes here -->
     </div>
+
   </div>
 
   <div id="dynamic-panel" class="flex-1 bg-white p-10"></div>
 </div>
 
-  <div id="full-panel" class="hidden bg-white p-6"></div>
-
-
-  <div id="who-example" class="hidden example-hint-who">
-    <div class="example-carousel flex items-center justify-center space-x-4" data-type="who">
-      <button onclick="prevExample(this)" class="p-2 text-gray-400 hover:text-gray-600">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-      </svg>
-    </button>
-
-      <div class="text-gray-500">
-        <span class="italic">Example:</span>
-        <span class="example-text font-semibold text-gray-700"></span>
-      </div>
-
-      <button onclick="nextExample(this)" class="p-2 text-gray-400 hover:text-gray-600">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-      </svg>
-    </button>
-  </div>
-</div>
-
-
-
-  <div id="goal-example" class="hidden example-hint-goal">
-  <div class="example-carousel flex items-center justify-center space-x-4" data-type="goal">
-    <button onclick="prevExample(this)" class="p-2 text-gray-400 hover:text-gray-600">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-      </svg>
-    </button>
-
-    <div class="text-gray-500">
-      <span class="italic">Example:</span>
-      <span class="example-text font-semibold text-gray-700"></span>
-    </div>
-
-    <button onclick="nextExample(this)" class="p-2 text-gray-400 hover:text-gray-600">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-      </svg>
-    </button>
-  </div>
-</div>
-
-
+<div id="full-panel" class="hidden bg-white p-6"></div>
 
 </main>
 
-
-
-<!-- ==== Bottom Action Buttons ==== -->
-<div id="bottom-actions">
- <button id="restart-button" onclick="restartApp()" class="flex items-center gap-2">
-  <img src="{{ url_for('static', filename='icons/1F503.svg') }}"
-       alt="restart" width="30" height="30" style="vertical-align:middle;">
-  Restart
-</button>
-
-  <button id="copy-button" class="flex items-center gap-2">
-  <img src="{{ url_for('static', filename='icons/1F4CB.svg') }}"
-       alt="Copy icon" width="30" height="30" class="inline-block align-middle">
-  Copy Objective
-</button>
-
-</div>
-
-
 </body>
-
-
 </html>

@@ -14,6 +14,10 @@
     <p class="mt-2 text-gray-600">
       Search for lesson plans, classroom activities, and teaching strategies from top education sites.
     </p>
+    <p class="mt-2 text-xs text-gray-400 max-w-2xl mx-auto">
+  This site is independently developed for educators and is not affiliated with or endorsed by any external educational organizations referenced in search results.
+</p>
+
   </header>
 
   <!-- Search Form -->
@@ -50,7 +54,7 @@
           <div class="mt-3">
             <a href="{{ article.url }}" target="_blank" rel="noopener noreferrer"
                class="inline-block bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-medium px-3 py-1 rounded-lg">
-              🔗 View on Google
+              🔗 View Resource
             </a>
           </div>
         </div>
@@ -61,11 +65,6 @@
       </p>
     {% endif %}
   </main>
-
-  <!-- Footer -->
-  <footer class="text-center text-xs text-gray-400 py-4">
-    Powered by <strong>OpenAI</strong> summaries and direct <strong>Google Search</strong> links from trusted education sites.
-  </footer>
 
 </body>
 </html>

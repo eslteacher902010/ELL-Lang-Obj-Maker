@@ -9,25 +9,49 @@
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-50 text-gray-800 font-sans">
+
   <header class="bg-white shadow-sm">
     <nav class="max-w-4xl mx-auto flex justify-between items-center py-4 px-6">
-      <h1 class="text-xl font-semibold text-blue-700">ELL Objective Builder</h1>
+
+      <h1 class="text-xl font-semibold text-blue-700">
+        ELL Objective Builder
+      </h1>
+
       <div class="space-x-4">
-        <a href="{{ url_for('index') }}" class="text-gray-700 hover:text-blue-600">Home</a>
-        <a href="{{ url_for('about') }}" class="text-gray-700 hover:text-blue-600">About</a>
+        <a href="{{ url_for('index') }}"
+           class="text-gray-700 hover:text-blue-600">
+           Home
+        </a>
+
+        <a href="{{ url_for('about') }}"
+           class="text-gray-700 hover:text-blue-600">
+           About
+        </a>
       </div>
+
     </nav>
   </header>
 
   <main class="max-w-3xl mx-auto mt-12 p-6 bg-white shadow rounded-lg">
-    <h2 class="text-2xl font-bold mb-4 text-blue-700">About this site</h2>
+
+    <h2 class="text-2xl font-bold mb-4 text-blue-700">
+      About this site
+    </h2>
+
     <p class="leading-relaxed text-gray-700">
       Very simply, this is a site I made to help teachers write language objectives.
       A lot of the inspiration came from another site called the
       <span class="font-medium text-blue-600">Learning Objective Maker</span>.
-      This is basically the ELL version of that site.
+      This project was inspired by objective-building tools designed to support instructional planning for educators.
     </p>
+
+    <p class="mt-6 text-xs text-gray-400">
+      This site is independently developed for educators and is not affiliated with or endorsed by WIDA or WCEPS.
+    </p>
+
   </main>
+
 </body>
 </html>
