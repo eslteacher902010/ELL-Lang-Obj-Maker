@@ -1,259 +1,348 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-
+  <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0V0LBXWYL"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-Z0V0LBXWYL"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-  gtag('config', 'G-Z0V0LBXWYL');
-</script>
+      gtag("config", "G-Z0V0LBXWYL");
+    </script>
 
-   <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  {% set canonical_url = "https://ellobjectivebuilder.com" + url_for(request.endpoint, **(request.view_args or {})) %}
+    {% set canonical_url = "https://ellobjectivebuilder.com" +
+    url_for(request.endpoint, **(request.view_args or {})) %}
 
-  <!-- SEO Meta Tags -->
-  <meta name="title" content="Language Objective Creator">
-  <meta name="description"
-        content="Create language objectives for multilingual learners and ESL classrooms.">
-  <meta name="keywords"
-        content="language objectives, ESL, multilingual learners, instructional design, lesson planning">
-  <meta name="author" content="Paul Kniaz">
+    <!-- SEO Meta Tags -->
+    <meta name="title" content="Language Objective Creator" />
+    <meta
+      name="description"
+      content="Create language objectives for multilingual learners and ESL classrooms."
+    />
+    <meta
+      name="keywords"
+      content="language objectives, ESL, multilingual learners, instructional design, lesson planning"
+    />
+    <meta name="author" content="Paul Kniaz" />
 
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="{{ canonical_url }}">
-  <meta property="og:title" content="Language Objective Creator">
-  <meta property="og:description"
-        content="Create language objectives for multilingual learners and ESL classrooms.">
-  <meta property="og:image"
-        content="https://ellobjectivebuilder.com/static/images/preview.png">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ canonical_url }}" />
+    <meta property="og:title" content="Language Objective Creator" />
+    <meta
+      property="og:description"
+      content="Create language objectives for multilingual learners and ESL classrooms."
+    />
+    <meta
+      property="og:image"
+      content="https://ellobjectivebuilder.com/static/images/preview.png"
+    />
 
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="{{ canonical_url }}">
-  <meta name="twitter:title" content="Language Objective Creator">
-  <meta name="twitter:description"
-        content="Create language objectives for multilingual learners and ESL classrooms.">
-  <meta name="twitter:image"
-        content="https://ellobjectivebuilder.com/static/images/preview.png">
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="{{ canonical_url }}" />
+    <meta name="twitter:title" content="Language Objective Creator" />
+    <meta
+      name="twitter:description"
+      content="Create language objectives for multilingual learners and ESL classrooms."
+    />
+    <meta
+      name="twitter:image"
+      content="https://ellobjectivebuilder.com/static/images/preview.png"
+    />
 
-  <link rel="icon" type="image/png"
-        href="{{ url_for('static', filename='images/books2.png') }}">
-  <link rel="canonical" href="{{ canonical_url }}">
-  <meta charset="UTF-8">
+    <link
+      rel="icon"
+      type="image/png"
+      href="{{ url_for('static', filename='images/books2.png') }}"
+    />
+    <link rel="canonical" href="{{ canonical_url }}" />
+    <meta charset="UTF-8" />
 
-  <link rel="stylesheet"
-        href="{{ url_for('static', filename='css/output.css') }}">
-  <link rel="stylesheet"
-        href="{{ url_for('static', filename='css/styles.css') }}">
-  <link rel="stylesheet"
-        href="{{ url_for('static', filename='css/navigation_css.css') }}">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/output.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/navigation_css.css') }}"
+    />
 
-  <script src="{{ url_for('static', filename='js/aiSuggestions.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/carousel.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/dynamic-panel.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/finalStep.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/showXYX.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/sidebar.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/steps.js') }}" defer></script>
+    <script
+      src="{{ url_for('static', filename='js/aiSuggestions.js') }}"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', filename='js/carousel.js') }}"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', filename='js/dynamic-panel.js') }}"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', filename='js/finalStep.js') }}"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', filename='js/showXYX.js') }}"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', filename='js/sidebar.js') }}"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', filename='js/steps.js') }}"
+      defer
+    ></script>
 
-  <title>Language Objective Creator</title>
-</head>
+    <title>Language Objective Creator</title>
+  </head>
 
-<!-- Agentic AI Floating Helper -->
-<div id="agentic-ai-helper">
+  <body>
+    <!-- Agentic AI Floating Helper -->
+    <div id="agentic-ai-helper">
+      <!-- ✕ Close Button -->
+      <button
+        id="ai-close-btn"
+        class="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-lg font-bold leading-none"
+      >
+        ✕
+      </button>
 
-  <!-- ✕ Close Button -->
-  <button id="ai-close-btn"
-    class="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-lg font-bold leading-none">
-    ✕
-  </button>
+      <!-- 🤖 Icon -->
+      <div class="text-2xl">🤖</div>
 
-  <!-- 🤖 Icon -->
-  <div class="text-2xl">🤖</div>
+      <!-- Content -->
+      <div>
+        <p class="text-gray-800 text-sm font-medium mb-2">
+          Hey! Want to find articles about your lesson topic?
+        </p>
 
-  <!-- Content -->
-  <div>
-    <p class="text-gray-800 text-sm font-medium mb-2">
-      Hey! Want to find articles about your lesson topic?
-    </p>
-
-    <button id="agentic-ai-button"
-      class="text-sm bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors">
-      Find Articles
-    </button>
-  </div>
-</div>
-
-<body>
-
-  <header class="bg-header text-gray-900 py-4 px-6 shadow-md">
-
-    <div class="text-xl font-bold text-gray-900">
-      Language Objective Creator
-    </div>
-
-    <p class="text-xs text-gray-400 mt-2">
-      This site is independently developed for educators and is not affiliated with or endorsed by WIDA or WCEPS.
-    </p>
-
-    <nav class="flex space-x-6">
-      <a href="{{ url_for('index') }}"
-         class="text-gray-700 hover:text-blue-600">Home</a>
-
-      <a href="{{ url_for('about') }}"
-         class="text-gray-700 hover:text-blue-600">About</a>
-
-      <a href="{{ url_for('contact') }}"
-         class="text-gray-700 hover:text-blue-600">Contact</a>
-
-      <a href="{{ url_for('wida_resources') }}"
-         class="text-gray-700 hover:text-blue-600">Teaching Resources</a>
-
-      <a href="{{ url_for('resources') }}"
-         class="text-gray-700 hover:text-blue-600">Search for Resources</a>
-    </nav>
-  </header>
-
-<main>
-
-<div class="bg-green-800 p-6 flex items-center justify-center">
-  <section class="flex items-center justify-center w-full">
-
-    <div class="relative z-10 flex flex-col justify-center w-full">
-
-      <!-- preview -->
-      <div id="objective-preview"
-        class="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-white text-xl font-[Caveat] tracking-normal text-center">
-
-        <span id="who">[who]</span>
-        <span>will be able to</span>
-        <span id="function">[function]</span>
-        <span id="goal">[goal]</span>
-        <span>through</span>
-        <span id="domain">[domain]</span>
-        <span>activities, using</span>
-        <span id="forms">[forms/features]</span>
-        <span>with</span>
-        <span id="supports" class="whitespace-nowrap">[supports]</span>
-        <span>.</span>
-
+        <button
+          id="agentic-ai-button"
+          class="text-sm bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors"
+        >
+          Find Articles
+        </button>
       </div>
     </div>
-  </section>
-</div>
 
-<!-- Step Navigation -->
-<nav id="step-nav"
-     class="relative flex items-center justify-between mt-8 mb-4 px-8">
+    <header class="bg-header text-gray-900 py-4 px-6 shadow-md">
+      <div class="text-xl font-bold text-gray-900">
+        Language Objective Creator
+      </div>
 
-  <!-- Back Button -->
-  <button id="back-button" onclick="goBackward()">« Back</button>
+      <p class="text-xs text-gray-400 mt-2">
+        This site is independently developed for educators and is not affiliated
+        with or endorsed by WIDA or WCEPS.
+      </p>
 
-  <!-- Steps -->
-  <div class="flex-grow flex justify-center">
-    <ul id="steps" class="flex items-center space-x-6">
+      <nav class="flex space-x-6">
+        <a
+          href="{{ url_for('index') }}"
+          class="text-gray-700 hover:text-blue-600"
+          >Home</a
+        >
 
-      <li>
-        <div id="step-0"
-             class="step flex items-center space-x-2 cursor-pointer">
-          <span class="step-label text-sm uppercase pb-1">Who?</span>
-          <span class="text-gray-400">&gt;</span>
+        <a
+          href="{{ url_for('about') }}"
+          class="text-gray-700 hover:text-blue-600"
+          >About</a
+        >
+
+        <a
+          href="{{ url_for('contact') }}"
+          class="text-gray-700 hover:text-blue-600"
+          >Contact</a
+        >
+
+        <a
+          href="{{ url_for('wida_resources') }}"
+          class="text-gray-700 hover:text-blue-600"
+          >Teaching Resources</a
+        >
+
+        <a
+          href="{{ url_for('resources') }}"
+          class="text-gray-700 hover:text-blue-600"
+          >Search for Resources</a
+        >
+      </nav>
+    </header>
+
+    <main>
+      <div class="bg-green-800 p-6 flex items-center justify-center">
+        <section class="flex items-center justify-center w-full">
+          <div class="relative z-10 flex flex-col justify-center w-full">
+            <!-- preview -->
+            <div
+              id="objective-preview"
+              class="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-white text-xl font-[Caveat] tracking-normal text-center"
+            >
+              <span id="who">[who]</span>
+              <span>will be able to</span>
+              <span id="function">[function]</span>
+              <span id="goal">[goal]</span>
+              <span>through</span>
+              <span id="domain">[domain]</span>
+              <span>activities, using</span>
+              <span id="forms">[forms/features]</span>
+              <span>with</span>
+              <span id="supports" class="whitespace-nowrap">[supports]</span>
+              <span>.</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div id="bottom-actions" class="hidden flex justify-center gap-3 mt-6">
+        <button
+          id="copy-button"
+          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Copy Objective
+        </button>
+      </div>
+
+      <!-- Step Navigation -->
+      <nav
+        id="step-nav"
+        class="relative flex items-center justify-between mt-8 mb-4 px-8"
+      >
+        <!-- Back Button -->
+        <button id="back-button" onclick="goBackward()">« Back</button>
+
+        <!-- Steps -->
+        <div class="flex-grow flex justify-center">
+          <ul id="steps" class="flex items-center space-x-6">
+            <li>
+              <div
+                id="step-0"
+                class="step flex items-center space-x-2 cursor-pointer"
+              >
+                <span class="step-label text-sm uppercase pb-1">Who?</span>
+                <span class="text-gray-400">&gt;</span>
+              </div>
+            </li>
+
+            <li>
+              <div
+                id="step-1"
+                class="step flex items-center space-x-2 cursor-pointer"
+              >
+                <span class="step-label text-sm uppercase pb-1">What?</span>
+                <span class="text-gray-400">&gt;</span>
+              </div>
+            </li>
+
+            <li>
+              <div
+                id="step-2"
+                class="step flex items-center space-x-2 cursor-pointer"
+              >
+                <span
+                  class="text-sm uppercase text-gray-400 hover:text-gray-600"
+                >
+                  Goal
+                </span>
+                <span class="text-gray-400">&gt;</span>
+              </div>
+            </li>
+
+            <li>
+              <div
+                id="step-3"
+                class="step flex items-center space-x-2 cursor-pointer"
+              >
+                <span class="step-label text-sm uppercase pb-1">Domain</span>
+                <span class="text-gray-400">&gt;</span>
+              </div>
+            </li>
+
+            <li>
+              <div
+                id="step-4"
+                class="step flex items-center space-x-2 cursor-pointer"
+              >
+                <span
+                  class="text-sm uppercase text-gray-400 hover:text-gray-600"
+                >
+                  Forms
+                </span>
+                <span class="text-gray-400">&gt;</span>
+              </div>
+            </li>
+
+            <li>
+              <div
+                id="step-5"
+                class="step flex items-center space-x-2 cursor-pointer"
+              >
+                <span
+                  class="text-sm uppercase text-gray-400 hover:text-gray-600"
+                >
+                  Supports
+                </span>
+                <span class="text-gray-400">&gt;</span>
+              </div>
+            </li>
+
+            <li>
+              <div
+                id="step-6"
+                class="step flex items-center space-x-2 cursor-pointer"
+              >
+                <span
+                  class="text-sm uppercase text-gray-400 hover:text-gray-600"
+                >
+                  Finished LO
+                </span>
+              </div>
+            </li>
+          </ul>
         </div>
-      </li>
 
-      <li>
-        <div id="step-1"
-             class="step flex items-center space-x-2 cursor-pointer">
-          <span class="step-label text-sm uppercase pb-1">What?</span>
-          <span class="text-gray-400">&gt;</span>
+        <!-- Next Button -->
+        <button id="next-button" onclick="goForward()">Next »</button>
+      </nav>
+
+      <div id="sidebar-section" class="hidden flex mt-20">
+        <div class="w-64 bg-gray-50 border-r border-gray-200 text-gray-800">
+          <p
+            id="sidebar-title"
+            class="px-4 pt-4 text-sm font-semibold text-gray-700"
+          ></p>
+
+          <p class="px-4 pt-4 text-xs text-gray-500 italic">
+            Designed to support language objective planning for multilingual
+            learners
+          </p>
+
+          <div id="sidebar-content" class="p-4">
+            <!-- dynamic content goes here -->
+          </div>
         </div>
-      </li>
 
-      <li>
-        <div id="step-2"
-             class="step flex items-center space-x-2 cursor-pointer">
-          <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
-            Goal
-          </span>
-          <span class="text-gray-400">&gt;</span>
-        </div>
-      </li>
+        <div id="dynamic-panel" class="flex-1 bg-white p-10"></div>
+      </div>
 
-      <li>
-        <div id="step-3"
-             class="step flex items-center space-x-2 cursor-pointer">
-          <span class="step-label text-sm uppercase pb-1">Domain</span>
-          <span class="text-gray-400">&gt;</span>
-        </div>
-      </li>
-
-      <li>
-        <div id="step-4"
-             class="step flex items-center space-x-2 cursor-pointer">
-          <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
-            Forms
-          </span>
-          <span class="text-gray-400">&gt;</span>
-        </div>
-      </li>
-
-      <li>
-        <div id="step-5"
-             class="step flex items-center space-x-2 cursor-pointer">
-          <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
-            Supports
-          </span>
-          <span class="text-gray-400">&gt;</span>
-        </div>
-      </li>
-
-      <li>
-        <div id="step-6"
-             class="step flex items-center space-x-2 cursor-pointer">
-          <span class="text-sm uppercase text-gray-400 hover:text-gray-600">
-            Finished LO
-          </span>
-        </div>
-      </li>
-
-    </ul>
-  </div>
-
-  <!-- Next Button -->
-  <button id="next-button" onclick="goForward()">Next »</button>
-</nav>
-
-<div id="sidebar-section" class="hidden flex mt-20">
-
-   <div class="w-64 bg-gray-50 border-r border-gray-200 text-gray-800">
-
-     <p id="sidebar-title"
-        class="px-4 pt-4 text-sm font-semibold text-gray-700"></p>
-
-     <p class="px-4 pt-4 text-xs text-gray-500 italic">
-       Designed to support language objective planning for multilingual learners
-     </p>
-
-    <div id="sidebar-content" class="p-4">
-      <!-- dynamic content goes here -->
-    </div>
-
-  </div>
-
-  <div id="dynamic-panel" class="flex-1 bg-white p-10"></div>
-</div>
-
-<div id="full-panel" class="hidden bg-white p-6"></div>
-
-</main>
-
-</body>
+      <div id="full-panel" class="hidden bg-white p-6"></div>
+    </main>
+  </body>
 </html>

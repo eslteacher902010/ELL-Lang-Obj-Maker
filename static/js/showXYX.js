@@ -3,8 +3,6 @@
 function showWhoInput(targetId = "dynamic-panel")  {
   const panel = document.getElementById(targetId);
 
-  // Prevent duplicates
-  if (panel.querySelector("#who-input")) return;
   panel.innerHTML = `
     <div class="flex flex-col space-y-2">
       <div class="flex items-center space-x-2">
@@ -34,7 +32,7 @@ function showWhoInput(targetId = "dynamic-panel")  {
     </div>
   `;
 
-    document.getElementById("who-example").classList.remove("hidden");
+    document.getElementById("who-example")?.classList.remove("hidden");
 }
 
 //show verb
@@ -90,7 +88,7 @@ function showContent(type) {
 
 //show goal
 function showGoalInput(targetId = "dynamic-panel") {
-  document.getElementById("who-example").classList.add("hidden");
+  document.getElementById("who-example")?.classList.add("hidden");
   const panel = document.getElementById(targetId);
   panel.innerHTML = `
     <div class="flex flex-col space-y-2">
@@ -111,7 +109,7 @@ function showGoalInput(targetId = "dynamic-panel") {
       </div>
     </div>
   `;
-   document.getElementById("goal-example").classList.remove("hidden");
+  document.getElementById("goal-example")?.classList.remove("hidden");
 }
 
 

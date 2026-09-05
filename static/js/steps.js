@@ -15,8 +15,8 @@ function nextStep(index) {
   if (index !== 0) clearDynamicPanel();
 
   // Always hide example hints when changing steps
-  document.getElementById("who-example").classList.add("hidden");
-  document.getElementById("goal-example").classList.add("hidden");
+  document.getElementById("who-example")?.classList.add("hidden");
+  document.getElementById("goal-example")?.classList.add("hidden");
 
   // Update visual step indicators
   steps.forEach((step, i) => {
@@ -39,46 +39,49 @@ function nextStep(index) {
   // Step logic
   if (index === 0) {
     // Step 0: WHO
-    document.getElementById("sidebar-section").classList.add("hidden");
-    document.getElementById("full-panel").classList.remove("hidden");
+    document.getElementById("sidebar-section")?.classList.add("hidden");
+    document.getElementById("full-panel")?.classList.remove("hidden");
     showWhoInput("full-panel");
 
     const aiHelper = document.getElementById("agentic-ai-helper");
-    const aiText = aiHelper.querySelector("p"); // Get the <p> tag inside the AI helper where the text message will appear
+    const aiText = aiHelper?.querySelector("p"); // Get the <p> tag inside the AI helper where the text message will appear
     const aiButton = document.getElementById("agentic-ai-button"); //getting the id from html
-    aiHelper.classList.remove("hide"); //unhiding itself--using css class it was hidden before
-    aiButton.dataset.mode = "intro"; // Set the button’s current mode to "intro" (this tells other code which behavior to run
-    aiButton.dataset.topic = ""; // Clear any previous topic — start fresh with an empty string--ready to start
 
-    aiText.textContent = // Set the AI helper’s welcome text (the first message the teacher sees)
-      "Hi! Can’t think of what to teach today? Let's see what teachers are teaching these days.";
-    aiButton.textContent = "Let's Go!"; //message that comes while gathering--what the user clicks to start
-    aiHelper.classList.add("show"); //show
+    if (aiHelper && aiText && aiButton) {
+      aiHelper.classList.remove("hide"); //unhiding itself--using css class it was hidden before
+      aiButton.dataset.mode = "intro"; // Set the button’s current mode to "intro" (this tells other code which behavior to run
+      aiButton.dataset.topic = ""; // Clear any previous topic — start fresh with an empty string--ready to start
+
+      aiText.textContent = // Set the AI helper’s welcome text (the first message the teacher sees)
+        "Hi! Can’t think of what to teach today? Let's see what teachers are teaching these days.";
+      aiButton.textContent = "Let's Go!"; //message that comes while gathering--what the user clicks to start
+      aiHelper.classList.add("show"); //show
+    }
   } else if (index === 1) {
     // Step 1: FUNCTION
-    document.getElementById("full-panel").classList.add("hidden"); //this is a function I use to show panel--want it hidden going in
+    document.getElementById("full-panel")?.classList.add("hidden"); //this is a function I use to show panel--want it hidden going in
     updateSidebar("function"); //this is also a function i have below
   } else if (index === 2) {
     // Step 2: GOAL
-    document.getElementById("sidebar-section").classList.add("hidden"); //now we are removing
-    document.getElementById("full-panel").classList.remove("hidden");//now we are adding
+    document.getElementById("sidebar-section")?.classList.add("hidden"); //now we are removing
+    document.getElementById("full-panel")?.classList.remove("hidden");//now we are adding
     showGoalInput("full-panel");   // Show the full panel again for typing the lesson goal
   } else if (index >= 3 && index <= 5) {   // Hide the full panel again for sidebar-only steps
     // Steps 3–5: DOMAIN / FORMS / SUPPORTS
-    document.getElementById("full-panel").classList.add("hidden");
+    document.getElementById("full-panel")?.classList.add("hidden");
     updateSidebar(["domain", "forms", "supports"][index - 3]);
   } else if (index === 6) {
     // Step 6: FINISHED LO -- Hide the full panel and navigation buttons (we're done!)
     adjustBotPosition(currentStep === 6);
     document.body.classList.add("fullscreen-active");
-    document.getElementById("full-panel").classList.add("hidden");
-    document.getElementById("next-button").classList.add("hidden");
-    document.getElementById("back-button").classList.add("hidden");
+    document.getElementById("full-panel")?.classList.add("hidden");
+    document.getElementById("next-button")?.classList.add("hidden");
+    document.getElementById("back-button")?.classList.add("hidden");
     const stepNav = document.getElementById("step-nav");
     if (stepNav) stepNav.style.display = "none";
 
     const bottomBar = document.getElementById("bottom-actions");
-    bottomBar.classList.add("show"); //this is a section that shows when it's full panel
+    bottomBar?.classList.add("show"); //this is a section that shows when it's full panel
 
     //In browser JavaScript, window is a special global object that represents the browser window or tab itself.
     const lessonTopic = sessionStorage.getItem("final_topic") || window.finalTopic || null; //not finalTopic is coming from agentic AI
@@ -119,8 +122,8 @@ if (widaBtn) {
 }
 
     const restartBtn = document.getElementById("restart-button");
-    restartBtn.classList.remove("hidden");
-    restartBtn.classList.add("show");
+    restartBtn?.classList.remove("hidden");
+    restartBtn?.classList.add("show");
 
     const preview = document.getElementById("objective-preview");
     const objectiveText = preview.innerText.trim();
@@ -182,8 +185,8 @@ if (widaBtn) {
     // Optional: clear the rest of the UI--to emphasize final obj
     document.querySelector("header").style.display = "none";
     document.querySelector("nav").style.display = "none";
-    document.getElementById("sidebar-section").classList.add("hidden");
-    document.getElementById("full-panel").classList.add("hidden");
+    document.getElementById("sidebar-section")?.classList.add("hidden");
+    document.getElementById("full-panel")?.classList.add("hidden");
   } else {
     updateSidebar("none");
   }
